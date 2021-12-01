@@ -42,7 +42,7 @@ const Otp = (props) => {
     formData.append("choice", choice);
     formData.append("value", emailOrNumber);
 
-    const response = await fetch("/api/verify-email-phone/", {
+    const response = await fetch(`${process.env.REACT_APP_ROOT_URL}/api/verify-email-phone/`, {
       method: "POST",
       body: formData,
     });
