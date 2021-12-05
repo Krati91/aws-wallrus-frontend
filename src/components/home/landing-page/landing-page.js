@@ -1,7 +1,11 @@
 import "./landing-page.scss";
 import { Button } from "@material-ui/core";
 import { Grid } from "@material-ui/core";
-import React, { useEffect, useState, useContext } from "react";
+import React, {
+  useEffect,
+  // useState,
+  useContext
+} from "react";
 import { AuthContext } from '../../../apis/AuthContext';
 import Ecosystem from "../../../images/ecosystem.svg";
 import Care from "../../../images/care.svg";
@@ -28,24 +32,26 @@ import HomeBanner from "../../home-banner/home-banner";
 import Header from "../../header/header";
 import Footer from "../footer/footer";
 import {
-  featuredArtistsList,
-  designList,
-  productReview,
+  // featuredArtistsList,
+  // designList,
+  // productReview,
 } from "../../../apis/apiCalls";
 import { Link, useHistory } from "react-router-dom";
 
 const LandingPage = (props) => {
-  const [artists, setArtists] = useState([]);
-  const [designs, setDesigns] = useState([]);
-  const [reviews, setReviews] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // const [artists, setArtists] = useState([]);
+  // const [designs, setDesigns] = useState([]);
+  // const [reviews, setReviews] = useState([]);
+  // const [loading, setLoading] = useState(true);
 
   const history = useHistory();
-  const { isAuth } = useContext(AuthContext);
+  const { isAuth, isArtist } = useContext(AuthContext);
 
   useEffect(() => {
-    isAuth ? history.push('/home') : history.push('/');
-  }, [isAuth, history])
+    isAuth && isArtist
+      ? history.push('/dashboard') : isAuth && !isArtist
+        ? history.push('/home') : history.push('/')
+  }, [isAuth, isArtist, history])
 
   // useEffect(() => {
   //   try {

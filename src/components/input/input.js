@@ -13,6 +13,7 @@ const Input = (props) => {
       variant="outlined"
       className={`width-100 primary-input ${props.className}`}
       type={props.type}
+      value={props.value}
     />
   );
 };

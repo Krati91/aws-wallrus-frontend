@@ -145,27 +145,31 @@ const UserProfile = (props) => {
   // ]
 
   useEffect(() => {
-    getDecoratorSnippet().then((res) => {
-      console.log(res);
-      setuserDetails({
-        first_name: res.first_name,
-        last_name: res.last_name,
-        level: res.level,
-        profile_picture: "",
-      });
-    });
-    getDecoratorFavourites().then((res) => {
-      let list = [];
-      res.forEach((value) => {
-        const design = {
-          name: value.artist,
-          image: value.image,
-        };
-        list.push(design);
-      });
-      setloader(false);
-      setdesignContents(list);
-    });
+    getDecoratorSnippet()
+      .then((res) => {
+        console.log(res);
+        setuserDetails({
+          first_name: res.first_name,
+          last_name: res.last_name,
+          level: res.level,
+          profile_picture: "",
+        });
+      })
+      .catch((err) => alert("Couldn't fetch your details"));
+    getDecoratorFavourites()
+      .then((res) => {
+        let list = [];
+        res.forEach((value) => {
+          const design = {
+            name: value.artist,
+            image: value.image,
+          };
+          list.push(design);
+        });
+        setloader(false);
+        setdesignContents(list);
+      })
+      .catch((err) => alert("Couldn't fetch your favorite designs"));
   }, []);
 
   return (

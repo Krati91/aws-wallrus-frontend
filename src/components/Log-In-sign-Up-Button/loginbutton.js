@@ -11,7 +11,7 @@ import { loginErrorActions } from "../../redux/Slices/loginErrorSlice/loginError
 const LogInButton = (props) => {
   const [loading, isLoading] = useState(false);
   const history = useHistory();
-  const { setIsAuth } = useContext(AuthContext);
+  const { setIsAuth, setIsArtist } = useContext(AuthContext);
 
   const validation = useSelector((state) => state.loginError);
   const dispatch = useDispatch();
@@ -56,7 +56,13 @@ const LogInButton = (props) => {
             .then((data) => {
               window.localStorage.setItem("User_Type", data.data.type);
               setIsAuth(true);
-              history.push("/home");
+              if (data.data.type === "Artist") {
+                setIsArtist(true);
+                history.push("/dashboard");
+              } else {
+                setIsArtist(false);
+                history.push('/home')
+              }
             })
             .catch((error) => {
               alert(
@@ -77,8 +83,8 @@ const LogInButton = (props) => {
       {!loading ? (
         <span>Log In</span>
       ) : (
-        <CircularProgress size={30} className="button-loader" />
-      )}
+          <CircularProgress size={30} className="button-loader" />
+        )}
     </Button>
   );
 };

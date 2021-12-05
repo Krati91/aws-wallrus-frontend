@@ -86,17 +86,30 @@ const ProductCard = (props) => {
         id={props.id}
       />
       <Box style={{ display: "flex", alignItems: "center" }} gridGap={10}>
-        <Avatar>
-          <img src={props.designerImage} alt="img" />
-        </Avatar>
-        <p className="x-bold prod-card--designer-name" style={{ marginRight: "auto" }}>
-          {props.designerName}
-        </p>
-        {/* <div className="design-artist-name-container">
-          <span className="design-artist-name">{props.designerName}</span>
-        </div> */}
-        {collectionIcon}
-        {heartIcon}
+        {props.general && (
+          <>
+            <Avatar>
+              <img src={props.designerImage} alt="img" />
+            </Avatar>
+            <p
+              className="x-bold prod-card--designer-name"
+              style={{ marginRight: "auto" }}
+            >
+              {props.designerName}
+            </p>
+          </>
+        )}
+        <Box
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, auto)",
+            gap: 10,
+            marginLeft: "auto",
+          }}
+        >
+          {collectionIcon}
+          {heartIcon}
+        </Box>
       </Box>
     </Box>
   );

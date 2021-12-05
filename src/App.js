@@ -22,7 +22,7 @@ import UploadDesignForm from "./components/home/Forms/Upload-design-form/upload-
 import "./App.scss";
 import MobileDashboard from "./components/dashboard/MobileDashboard";
 import LandingPage from "./components/home/landing-page/landing-page";
-import HomePage from "./components/home/home";
+// import HomePage from "./components/home/home";
 import ArtistList from "./components/home/artist/artistList";
 import ViewArtist from "./components/home/artist/viewArtist";
 import HomeDiscover from "./components/home/home-discover/home-discover";
@@ -37,6 +37,7 @@ import Payment from "./components/home/payment/payment";
 import RequestForm from "./components/home/Forms/Request-Management-Form/request-form";
 import AboutUs from "./components/home/landing-page/about-us/about-us";
 import DesignToSell from "./components/home/landing-page/design-to-sell/design-to-sell";
+import ForgotPassword from "./components/forgot-password/forgot-password";
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
@@ -122,7 +123,11 @@ function App() {
         <Route exact path="/edit-design">
           <EditDesign />
         </Route>
-        {isArtist ? <Redirect to="/dashboard" /> : <Redirect to="/home" />}
+        {isArtist ? (
+          <Redirect to="/dashboard" />
+        ) : (
+            <Redirect to="/home" />
+          )}
       </>
     );
   } else {
@@ -148,13 +153,14 @@ function App() {
         </Route>
         <Route exact path="/about-us" component={AboutUs} />
         <Route exact path="/design-to-sell" component={DesignToSell} />
-        <Redirect to="/" />
+        <Route exact path="/forgot-password/:email" component={ForgotPassword} />
+        {/* <Redirect to="/" /> */}
       </>
     );
   }
 
   return (
-    <AuthContext.Provider value={{ isAuth, setIsAuth }}>
+    <AuthContext.Provider value={{ isAuth, setIsAuth, isArtist, setIsArtist }}>
       <div className="App">
         <Router>
           <Switch>{routes}</Switch>

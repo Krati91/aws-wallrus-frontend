@@ -8,7 +8,7 @@ import Bag from "../../../images/Bag.svg";
 import Heart from "../../../images/Heart.svg";
 import Model from "../../../images/model.svg";
 import Notification from "../../../images/Notification.svg";
-import ArrowDown from "../../../images/arrow-down.svg";
+// import ArrowDown from "../../../images/arrow-down.svg";
 import { NavLink, Link, useHistory } from "react-router-dom";
 import { Button, makeStyles, InputBase } from "@material-ui/core";
 import UserSettings from "../../user-settings/user-settings";

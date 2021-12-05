@@ -137,8 +137,9 @@ const ShopContainer = (props) => {
                   {!loader &&
                     applications.map((tab) => (
                       <Tab label={tab.name} className="tab" disableRipple />
-                    ))}
-      
+                    ))
+                  }
+
                   {/* <Tab
                     label={
                       <span className="tab-dotmenu-container">

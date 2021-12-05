@@ -68,27 +68,39 @@ const UploadDesignForm = (props) => {
   });
 
   useEffect(() => {
-    const init = async () => {
-      try {
-        const appsResponse = await getApplications();
-        setAppList(appsResponse.data);
-        setApplication(appsResponse.data[0].slug);
-        const prodsResponse = await getProducts(appsResponse.data[0].slug);
-        setProducts(prodsResponse.data);
-        setProduct(prodsResponse.data[0].slug);
+    getApplications().then((appsResponse) => {
+      if (appsResponse && appsResponse.length !== 0) {
+        setAppList(appsResponse);
+        setApplication(appsResponse[0].slug);
         setAppLoader(false);
-        setProdLoader(false);
-        setWidth(widths[0]);
-        setHeight(heights[0]);
-        setUnit(units[0]);
-      } catch (err) {
+
+        getProducts(appsResponse[0].slug).then((prodsResponse) => {
+          if (prodsResponse) {
+            setProducts(prodsResponse);
+            setProduct(prodsResponse[0].slug);
+            setProdLoader(false);
+          }
+        });
+      } else {
+        setAppList([{
+          name: "No applications found",
+          slug: "no data found"
+        }]);
+        setApplication("No application found");
         setAppLoader(false);
+        setProducts([{
+          name: "No products found",
+          slug: "no data found"
+        }]);
+        setProduct([]);
         setProdLoader(false);
-        console.log(err);
-        alert("Something went wrong!");
       }
-    };
-    init();
+
+    });
+
+    setWidth(widths[0]);
+    setHeight(heights[0]);
+    setUnit(units[0]);
   }, []);
 
   const classes = useStyles();
@@ -138,34 +150,40 @@ const UploadDesignForm = (props) => {
   const onApplicationChange = (e) => {
     setProdLoader(true);
     setApplication(e.target.value);
-    getProducts(e.target.value).then((res) => {
-      setProducts(res.data);
+    if (e.target.value !== "no data found") {
+      getProducts(e.target.value).then((res) => {
+        setProducts(res);
+        setProdLoader(false);
+      });
+    } else {
       setProdLoader(false);
-    });
+    }
   };
   const onSubmitHandler = async () => {
     if (validation()) {
       setSubmitLoader(true);
-      try {
-        await uploadDesign({
-          name,
-          phoneNumber,
-          application,
-          product,
-          width,
-          height,
-          unit,
-          link,
-          price,
-          remark,
-        });
-        setSubmitLoader(false);
-        alert("Design Uploaded successfully");
-        reset();
-      } catch (err) {
-        setSubmitLoader(false);
-        alert("Something went wrong!");
-      }
+
+      uploadDesign({
+        name,
+        phoneNumber,
+        application,
+        product,
+        width,
+        height,
+        unit,
+        link,
+        price,
+        remark,
+      }).then((res) => {
+        if (res) {
+          setSubmitLoader(false);
+          alert("Design Uploaded successfully");
+          reset();
+        } else {
+          setSubmitLoader(false);
+          alert("Something went wrong!");
+        }
+      });
     }
   };
 
@@ -207,7 +225,7 @@ const UploadDesignForm = (props) => {
                 InputLabelProps={{ classes: { root: classes.label } }}
                 fullWidth
                 type="number"
-                label="Phone number"style={{ borderRadius: "12px 12px 0 0 !important" }}
+                label="Phone number" style={{ borderRadius: "12px 12px 0 0 !important" }}
                 error={!validate.phone}
                 helperText={!validate.phone ? "Invalid Phone Number" : null}
                 onChange={(e) => setPhoneNumber(e.target.value)}
@@ -221,20 +239,20 @@ const UploadDesignForm = (props) => {
                   className={classes.skeleton}
                 />
               ) : (
-                <div>
-                  <p>Select applications</p>
-                  <Select
-                    fullWidth
-                    value={application}
-                    variant="outlined"
-                    onChange={(e) => onApplicationChange(e)}
-                  >
-                    {appList.map((app) => (
-                      <MenuItem value={app.slug}>{app.name}</MenuItem>
-                    ))}
-                  </Select>
-                </div>
-              )}
+                  <div>
+                    <p>Select applications</p>
+                    <Select
+                      fullWidth
+                      value={application}
+                      variant="outlined"
+                      onChange={(e) => onApplicationChange(e)}
+                    >
+                      {appList.map((app) => (
+                        <MenuItem value={app.slug}>{app.name}</MenuItem>
+                      ))}
+                    </Select>
+                  </div>
+                )}
               {prodLoader ? (
                 <Skeleton
                   animation="wave"
@@ -242,20 +260,20 @@ const UploadDesignForm = (props) => {
                   className={classes.skeleton}
                 />
               ) : (
-                <div style={{ marginTop: "30px" }}>
-                  <p>Select products</p>
-                  <Select
-                    fullWidth
-                    value={product}
-                    variant="outlined"
-                    onChange={(e) => setProduct(e.target.value)}
-                  >
-                    {products.map((app) => (
-                      <MenuItem value={app.slug}>{app.design_name}</MenuItem>
-                    ))}
-                  </Select>
-                </div>
-              )}
+                  <div style={{ marginTop: "30px" }}>
+                    <p>Select products</p>
+                    <Select
+                      fullWidth
+                      value={product}
+                      variant="outlined"
+                      onChange={(e) => setProduct(e.target.value)}
+                    >
+                      {products.map((app) => (
+                        <MenuItem value={app.slug}>{app.design_name}</MenuItem>
+                      ))}
+                    </Select>
+                  </div>
+                )}
               <div>
                 <p>Dimensions</p>
                 <div className="customize-design-dimensions-container">
@@ -351,8 +369,8 @@ const UploadDesignForm = (props) => {
                     size={30}
                   />
                 ) : (
-                  "Submit"
-                )}
+                    "Submit"
+                  )}
               </Button>
               <span className="helper-text-custom-design-form">
                 {<img src={alertCircle} className="alert-circle" />}Wallrus Team

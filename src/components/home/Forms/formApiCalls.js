@@ -12,6 +12,7 @@ export const uploadDesign = async ({
   price,
   remark,
 }) => {
+  let formresponse;
   const formData = new FormData();
   formData.append("name", name);
   formData.append("phone_number", phoneNumber);
@@ -24,7 +25,12 @@ export const uploadDesign = async ({
   formData.append("price", price);
   formData.append("remarks", remark);
 
-  await axios.post("/api/upload-own-design", formData);
+  await axios.post("/api/upload-own-design", formData)
+    .then((res) => {
+      formresponse = res.data;
+    }).catch((err) => console.log('Could not upload your design', err));
+
+  return formresponse;
 };
 
 export const customizeDesign = async ({
@@ -85,9 +91,22 @@ export const requestMeasurement = async ({
 };
 
 export const getApplications = async () => {
-  return await axios.get("/api/app-list");
+  let response;
+  await axios.get(`/api/app-list/`)
+    .then((res) => {
+      console.log('asdasd', res.data);
+      response = res.data;
+    }).catch((err) => console.log('Could not get the application-list', err));
+
+  return response;
 };
 
 export const getProducts = async (application) => {
-  return await axios.get(`/api/product-list/${application}`);
+  let response;
+  await axios.get(`/api/product-list/${application}`)
+    .then((res) => {
+      response = res.data;
+    }).catch((err) => console.log('Could not get the product-list', err));
+
+  return response;
 };

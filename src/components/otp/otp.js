@@ -1,11 +1,12 @@
-import { Button, CircularProgress, TextField } from "@material-ui/core";
-import React, { useEffect, useRef, useState } from "react";
+import { Button, CircularProgress } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
 import validator from "validator";
 import { useSelector } from "react-redux";
 import { selectEmailNumber } from "../../redux/Slices/userSignUpSlice/userSignUpSlice";
 import Input from "../input/input";
 import Logo from "../../images/logo.svg";
 import ChevronLeft from "../../images/chevron-left.svg";
+import axios from "axios";
 import "./otp.scss";
 
 const Otp = (props) => {
@@ -42,10 +43,12 @@ const Otp = (props) => {
     formData.append("choice", choice);
     formData.append("value", emailOrNumber);
 
-    const response = await fetch(`${process.env.REACT_APP_ROOT_URL}/api/verify-email-phone/`, {
+    const response = await fetch("/api/verify-email-phone/", {
       method: "POST",
       body: formData,
     });
+
+    // await axios.post("/api/verify-email-phone/", formData);
     const data = await response.json();
     return data;
   };
@@ -68,7 +71,6 @@ const Otp = (props) => {
   };
 
   const verifyOtp = () => {
-    console.log(otp, code);
     if (otp === code) {
       alert("OTP verified successfully");
       setOtpValid(true);

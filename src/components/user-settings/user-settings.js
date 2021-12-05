@@ -1,4 +1,5 @@
 import React from "react";
+import { AuthContext } from '../../apis/AuthContext';
 import "./user-settings.scss";
 import ArrowDown from "../../images/arrow-down.svg";
 import ArrowRight from "../../images/arrow-right.svg";
@@ -26,6 +27,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const UserSettings = (props) => {
+  const { setIsAuth } = React.useContext(AuthContext);
+
   const userType = window.localStorage.getItem("User_Type");
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -45,8 +48,9 @@ const UserSettings = (props) => {
 
   const LogoutHandler = () => {
     window.localStorage.clear();
-    history.push("/");
-    window.location.reload();
+    window.sessionStorage.clear();
+    setIsAuth(false);
+    history.push('/');
   };
 
   const handleTabs = (event) => {
@@ -117,7 +121,7 @@ const UserSettings = (props) => {
                     <span>My order</span>
                   </li>
                 </Link>
-                <Link to="/favourites" style={{ textDecoration: "none" }}>
+                <Link to="/userprofile" style={{ textDecoration: "none" }}>
                   <li id="4" onClick={handleTabs}>
                     <img
                       src={heartImg}
@@ -127,7 +131,7 @@ const UserSettings = (props) => {
                     <span>Favourites</span>
                   </li>
                 </Link>
-                <Link to="/collection" style={{ textDecoration: "none" }}>
+                <Link to="/userprofile" style={{ textDecoration: "none" }}>
                   <li id="5" onClick={handleTabs}>
                     <img
                       src={collectionImg}

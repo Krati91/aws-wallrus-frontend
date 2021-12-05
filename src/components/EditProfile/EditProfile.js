@@ -365,52 +365,32 @@ const Editprofile = (props) => {
         //     EditProfileDispatch(refreshed_data);
         //     setEditProfileLoading(false);
         //   });
-        getEditProfileDetails()
+        getEditProfileDetails(accessToken)
           .then((artistData) => {
-            EditProfileDispatch(artistData);
-            setEditProfileLoading(false);
-          })
-          .catch((err) => {
-            console.log(err);
-            alert("Something went wrong");
+            if (artistData) {
+              EditProfileDispatch(artistData);
+              setEditProfileLoading(false);
+            }
+          }).catch((err) => {
+            // console.log(err);
+            alert("Edit Profile: Something went wrong");
             setEditProfileLoading(false);
           });
       }
       if (value === 2 && followerFrequency === "") {
         Notificationsettings(accessToken, refreshToken)
           .then((notificationSettings) => {
-            console.log(notificationSettings);
+            // console.log(notificationSettings);
             NotificationSettingsDispatch(notificationSettings);
           })
           .catch((refreshed_data) => {
-            console.log(refreshed_data);
+            // console.log(refreshed_data);
+            alert("Notification Settings: Something went wrong");
             NotificationSettingsDispatch(refreshed_data);
           });
       }
     }
   }, [value]);
-
-  const onSaveHandler = () => {
-    switch (value) {
-      case 0:
-        break;
-      case 1:
-        try {
-          savePasswordChange(oldPassword, newPassword, confirmNewPassword);
-        } catch (err) {
-          alert(
-            "Invalid password entered. Please provide correct credentials."
-          );
-        }
-        break;
-      case 2:
-        break;
-      case 3:
-        break;
-      default:
-        break;
-    }
-  };
 
   if (AboutYouDisabled || BusinessDisabled || BankDisabled) {
     editProfileDisabled = true;

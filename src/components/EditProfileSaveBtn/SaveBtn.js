@@ -174,8 +174,11 @@ const CustomButton = (props) => {
             setLoading(true)
             PutEdit(accessToken, refreshToken, formDataEditProfile)
                 .then((res) => {
+                  if(res) {
                     setLoading(false)
                     setSuccess(true)
+                    alert("Profile updated successfully");
+                  }
                 })
                 .catch((err) => {
                     setLoading(false)
@@ -189,6 +192,7 @@ const CustomButton = (props) => {
                 .then((res) => {
                     setLoading(false)
                     setSuccess(true)
+                    alert("Password updated successfully");
                 })
                 .catch((err) => {
                     setLoading(false)
@@ -201,6 +205,7 @@ const CustomButton = (props) => {
                 .then((res) => {
                     setLoading(false)
                     setSuccess(true)
+                    alert("Notification settings updated successfully");
                 })
                 .catch((err) => {
                     setLoading(false)

@@ -23,7 +23,11 @@ const HomePage = () => {
   const history = useHistory();
 
   useEffect(() => {
-    window.localStorage.getItem("Access_Key") ? history.push('/home') : history.push('/');
+    if (window.localStorage.getItem("Access_Key")) {
+      (window.localStorage.getItem("User_Type") === "Artist") ? history.push('/dashboard') : history.push('/home');
+    } else {
+      history.push('/')
+    }
 
     LatestDesigns().then((newDesignsList) => {
       setNewDesigns(newDesignsList);

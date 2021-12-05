@@ -4,6 +4,7 @@ import Logo from "../../images/logo.svg";
 import SocialMediaLogIn from "../socialmedia/socialmedialogin";
 import SignIn from "../signin/signin";
 import InputModal from "../input-modal/input-modal";
+import ForgotPassword from "../forgot-password/forgot-password";
 
 const Login = (props) => {
   return (
@@ -31,7 +32,6 @@ const Login = (props) => {
           </div>
         </div>
       </div>
-
     </>
   );
 };

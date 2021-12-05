@@ -6,7 +6,9 @@ import {
   Button,
 } from "@material-ui/core";
 import validator from "validator";
+import { useHistory } from "react-router";
 import "./input-modal.scss";
+import Input from "../input/input";
 
 const InputModal = (props) => {
   const [email, setEmail] = useState("");
@@ -23,6 +25,8 @@ const InputModal = (props) => {
     resetInputs();
   }, []);
 
+  const history = useHistory();
+
   const validation = () => {
     const isEmail = validator.isEmail(email);
     setValidate({ email: isEmail });
@@ -34,6 +38,8 @@ const InputModal = (props) => {
     if (enable) {
       // Api call goes here
       try {
+        // Redirecting to forgot password page
+        history.push(`/forgot-password/${email}`);
       } catch (err) {
         alert("Something went wrong");
       }
@@ -50,9 +56,8 @@ const InputModal = (props) => {
       <div className="input-modal--backdrop" onClick={props.hideModal} />
       <div className="input-modal">
         <p>Forgot your password? Enter the your email below</p>
-        <TextField
-          label="Email"
-          variant="outlined"
+        <Input
+          placeholder="Email"
           error={!validate.email}
           helperText={!validate.email ? "Provide a valid email" : null}
           fullWidth

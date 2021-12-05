@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import './dashboard.scss';
-
+import { useHistory } from 'react-router-dom';
 import { ArtistSnippet } from "../../apis/apiCalls";
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Edit from '../../images/Edit.svg';
-import ModelBig from '../../images/Model-big.svg';
+// import ModelBig from '../../images/Model-big.svg';
 import Gallery from '../../images/gallery.svg';
 import PlusButton from '../../images/Plus.svg';
 import Earning from '../../images/Earning.svg';
@@ -194,9 +194,14 @@ const Dashboard = (props) => {
       ))
   }
 
+  const history = useHistory();
 
   useEffect(() => {
-
+    if (window.localStorage.getItem("Access_Key")) {
+      (window.localStorage.getItem("User_Type") === "Artist") ? history.push('/dashboard') : history.push('/home');
+    } else {
+      history.push('/')
+    }
     setIsLoading(true)
 
     if (accessToken && refreshToken && firstName === '') {
@@ -342,7 +347,7 @@ const Dashboard = (props) => {
           </Grid>
         </Grid>
       </div>
-      )
+        )
       }
     </React.Fragment>
 

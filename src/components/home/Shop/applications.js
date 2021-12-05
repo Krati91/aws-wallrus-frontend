@@ -5,7 +5,6 @@ import { Grid, Button, Box } from "@material-ui/core";
 import filterArrow from "../../../images/arrow-down.svg";
 import design1 from "../../../images/design1.svg";
 import design2 from "../../../images/design2.svg";
-// import ProductCard from "../product-cards";
 import ProductCard from "../../product-card/product-card";
 import Filters from "./filters/filters";
 import Dropdown from "react-dropdown";
@@ -19,6 +18,7 @@ const Applications = (props) => {
     productList: false,
     filters: false,
   });
+  const [listLoader, setListLoader] = useState(true);
   const [filtersList, setFiltersList] = useState([]);
 
   //   useEffect(async() => {
@@ -72,85 +72,106 @@ const Applications = (props) => {
 
     if (props.application === "wallpaper" && props.tabvalue === 0) {
       productList("wallpaper").then((productsList) => {
-        setApplication(productsList.data);
-        setApiStatus({ ...apiStatus, productList: true });
-        // console.log(application);
+        if (productsList) {
+          setApplication(productsList);
+          setApiStatus({ ...apiStatus, productList: true });
+          setListLoader(false);
+          // console.log(application);
+        }
       });
 
       filterList("wallpaper").then((filtersList) => {
-        setFiltersList(filtersList.data);
+        setFiltersList(filtersList);
         setApiStatus({ ...apiStatus, filters: true });
       });
     }
 
     if (props.application === "curtains" && props.tabvalue === 1) {
       productList(props.application).then((productsList) => {
-        setApplication(productsList.data);
-        setApiStatus({ ...apiStatus, productList: true });
+        if (productsList) {
+          setApplication(productsList);
+          setApiStatus({ ...apiStatus, productList: true });
+          setListLoader(false);
+        }
       });
 
       filterList(props.application).then((filtersList) => {
-        setFiltersList(filtersList.data);
+        setFiltersList(filtersList);
         setApiStatus({ ...apiStatus, filters: true });
       });
     }
 
     if (props.application === "curtain-blinds" && props.tabvalue === 2) {
       productList(props.application).then((productsList) => {
-        setApplication(productsList.data);
-        setApiStatus({ ...apiStatus, productList: true });
+        if (productsList) {
+          setApplication(productsList);
+          setApiStatus({ ...apiStatus, productList: true });
+          setListLoader(false);
+        }
       });
 
       filterList(props.application).then((filtersList) => {
-        setFiltersList(filtersList.data);
+        setFiltersList(filtersList);
         setApiStatus({ ...apiStatus, filters: true });
       });
     }
 
     if (props.application === "cushion-covers" && props.tabvalue === 3) {
       productList(props.application).then((productsList) => {
-        setApplication(productsList.data);
-        setApiStatus({ ...apiStatus, productList: true });
+        if (productsList) {
+          setApplication(productsList);
+          setApiStatus({ ...apiStatus, productList: true });
+          setListLoader(false);
+        }
       });
 
       filterList(props.application).then((filtersList) => {
-        setFiltersList(filtersList.data);
+        setFiltersList(filtersList);
         setApiStatus({ ...apiStatus, filters: true });
       });
     }
 
     if (props.application === "table-runners" && props.tabvalue === 4) {
       productList(props.application).then((productsList) => {
-        setApplication(productsList.data);
-        setApiStatus({ ...apiStatus, productList: true });
+        if (productsList) {
+          setApplication(productsList);
+          setApiStatus({ ...apiStatus, productList: true });
+          setListLoader(false);
+        }
       });
 
       filterList(props.application).then((filtersList) => {
-        setFiltersList(filtersList.data);
+        setFiltersList(filtersList);
         setApiStatus({ ...apiStatus, filters: true });
       });
     }
 
     if (props.application === "tablecloth" && props.tabvalue === 5) {
       productList(props.application).then((productsList) => {
-        setApplication(productsList.data);
-        setApiStatus({ ...apiStatus, productList: true });
+        if (productsList) {
+          setApplication(productsList);
+          setApiStatus({ ...apiStatus, productList: true });
+          setListLoader(false);
+        }
       });
 
       filterList(props.application).then((filtersList) => {
-        setFiltersList(filtersList.data);
+        setFiltersList(filtersList);
         setApiStatus({ ...apiStatus, filters: true });
       });
     }
 
     if (props.application === "table-placemats" && props.tabvalue === 6) {
       productList(props.application).then((productsList) => {
-        setApplication(productsList.data);
-        setApiStatus({ ...apiStatus, productList: true });
+        if (productsList) {
+          setApplication(productsList);
+          setApiStatus({ ...apiStatus, productList: true });
+          setListLoader(false);
+        }
       });
 
       filterList(props.application).then((filtersList) => {
-        setFiltersList(filtersList.data);
+        setFiltersList(filtersList);
         setApiStatus({ ...apiStatus, filters: true });
       });
     }
@@ -261,7 +282,8 @@ const Applications = (props) => {
   const offset = currentPage * PER_PAGE;
 
   let pages = [];
-  for (let i = 1; i <= Math.ceil(application.length / PER_PAGE); i++) {
+  const length = application.length || 0;
+  for (let i = 1; i <= Math.ceil(length / PER_PAGE); i++) {
     pages.push(i);
   }
 
@@ -315,47 +337,51 @@ const Applications = (props) => {
         ) : null}
 
         <Grid item xs>
-          {apiStatus.productList !== true ? (
+          {listLoader ? (
             <div className="application-loader-container">
               <div>
                 <CircularProgress size={80} className="application-loader" />
               </div>
             </div>
           ) : (
-            <>
-              <Grid
-                container
-                spacing={4}
-                justifyContent="flex-end"
-                direction="row"
-                style={{ marginTop: "2.6%", paddingLeft: "40px" }}
-              >
-                {application
-                  .slice(offset, offset + PER_PAGE)
-                  .map((item, index) => (
-                    <Grid item xs={6} md={4} lg={3} xl={3}>
-                      <ProductCard
-                        generaldata={true}
-                        key={index}
-                        id={item.slug}
-                        onClick={viewProduct}
-                        designImage={
-                          item.productimages_set.length !== 0
-                            ? item.productimages_set[0].image
-                            : design1
-                        }
-                        designerName={item.artist}
-                      />
-                    </Grid>
-                  ))}
-              </Grid>
-              <Pagination
-                pages={pages}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-              />
-            </>
-          )}
+              <>
+                <Grid
+                  container
+                  spacing={4}
+                  justifyContent="flex-end"
+                  direction="row"
+                  style={{ marginTop: "2.6%", paddingLeft: "40px" }}
+                >
+                  {application
+                    .slice(offset, offset + PER_PAGE)
+                    .map((item, index) => (
+                      <Grid item xs={6} md={4} lg={3} xl={3} style={{ maxWidth: '322px' }}>
+                        <ProductCard
+                          general={true}
+                          key={index}
+                          id={item.slug}
+                          onClick={viewProduct}
+                          designImage={
+                            item.productimages_set.length !== 0
+                              ? item.productimages_set[0].image
+                              : design1
+                          }
+                          designerName={item.artist}
+                        />
+                      </Grid>
+                    ))}
+                </Grid>
+                {length > 0 ? (
+                  <Pagination
+                    pages={pages}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                  />
+                ) : (
+                    <p style={{ textAlign: "center" }}>No data found</p>
+                  )}
+              </>
+            )}
         </Grid>
       </Grid>
     </div>
