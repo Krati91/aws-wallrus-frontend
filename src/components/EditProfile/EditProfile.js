@@ -198,7 +198,7 @@ const Editprofile = (props) => {
     );
     dispatch(
       setFullName({
-        fullName: editProfiledata.User_Info.first_name,
+        fullName: `${editProfiledata.User_Info.first_name} ${editProfiledata.User_Info.last_name}`,
       })
     );
     dispatch(

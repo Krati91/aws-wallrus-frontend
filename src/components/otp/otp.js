@@ -18,18 +18,16 @@ const Otp = (props) => {
   const emailNumber = useSelector(selectEmailNumber);
 
   useEffect(() => {
-    const init = async () => {
-      try {
-        const otp = await sendOtp();
-        setCode(otp);
+    sendOtp().then((res) => {
+      if(res) {
         setLoader(false);
-      } catch (err) {
-        setLoader(false);
-
-        alert(`Couldn't send OTP to ${emailNumber}. Try again`);
+        setOtp(res);
       }
-    };
-    init();
+    }).catch((err) => {
+      setLoader(false);
+      alert(`Couldn't send OTP to ${emailNumber}. Try again`);
+      console.log('Error in sending OTP', err);
+    })
   }, []);
 
   useEffect(() => {
@@ -43,14 +41,13 @@ const Otp = (props) => {
     formData.append("choice", choice);
     formData.append("value", emailOrNumber);
 
-    const response = await fetch("/api/verify-email-phone/", {
-      method: "POST",
-      body: formData,
-    });
+    let response;
+    await axios.post("/api/verify-email-phone/", formData)
+    .then((res) => {
+      response = res.data;
+    }).catch((err) => console.log('OTP api issue', err));
 
-    // await axios.post("/api/verify-email-phone/", formData);
-    const data = await response.json();
-    return data;
+    return response;
   };
 
   const isEmail = () => {
@@ -66,8 +63,16 @@ const Otp = (props) => {
 
   const resendOtp = async () => {
     resetCounter();
-    const otp = await sendOtp();
-    setCode(otp);
+    sendOtp().then((res) => {
+      if(res) {
+        setLoader(false);
+        setOtp(res);
+      }
+    }).catch((err) => {
+      setLoader(false);
+      alert(`Couldn't send OTP to ${emailNumber}. Try again`);
+      console.log('Error in re-sending OTP', err);
+    })
   };
 
   const verifyOtp = () => {
@@ -114,7 +119,7 @@ const Otp = (props) => {
                 type="number"
                 placeholder="OTP"
                 className="margin-y-20 width-100"
-                onChange={(event) => setOtp(event.target.value)}
+                onChange={(event) => setCode(event.target.value)}
                 error={!isOtpValid}
                 helperText={!isOtpValid ? "Please provide a valid OTP" : null}
               />

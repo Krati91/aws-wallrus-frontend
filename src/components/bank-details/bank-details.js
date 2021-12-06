@@ -259,8 +259,7 @@ export default function BankDetails(props) {
       })
       .catch((error) => {
         alert("Something went wrong, please try signing up again");
-        window.location.reload();
-
+        // window.location.reload();
       })
 
   }
