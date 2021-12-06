@@ -1,0 +1,10 @@
+.primary-input input + fieldset {
+  border-color: #000;
+  border-radius: 12px 12px 0 0;
+}
+.primary-input input:focus + fieldset {
+  border-color: #000 !important;
+}
+.primary-input label.Mui-focused {
+  color: #000;
+}

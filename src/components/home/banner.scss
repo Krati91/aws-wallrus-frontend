@@ -1,0 +1,127 @@
+.banner-container
+{
+    width: auto;
+    height: 72px;
+    position: relative;
+    background: #E8F7EE;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+    .banner-content
+    {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .banner-image-container
+        {
+            width: 32px;
+            height: 32px;
+            margin: 0px 12px;
+        }
+        
+        .banner-text
+        {
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 600;
+            padding: 0px;
+            width: 300px;
+            color: #1B1918;
+        }
+
+        .banner-button
+        {
+            font-weight: 600;
+            font-style: normal;
+            font-size: 15px !important;
+            margin-left: 20px;
+            padding: 5px 10px !important;
+            border-color: #000 !important;
+        }
+        .banner-button-mobile
+        {
+            display: none;
+        }
+        .banner-button-arrow-container
+        {
+            position: relative;
+            width: 10px;
+            height: 10px;
+            top: -7px;
+            left: 10px;
+        }
+    }
+}
+
+
+@media screen and (min-width : 310px) and (max-width : 599px) {
+
+    .banner-button
+    {
+        display: none !important;
+    }
+
+    .MuiButton-outlined
+    {
+        border: none !important;
+    }
+
+    .banner-content
+    {
+        width: 100%;
+        display: flex !important;
+        align-items: center !important;
+        .banner-image-container
+        {
+            
+            position: relative;
+            margin-right: 25px !important;
+            .banner-image
+            {
+                width: 45px !important;
+                height: 45px !important;
+                position: absolute;
+                left: 0%;
+                top: -20%;
+            }
+        }
+        .banner-text
+        {
+            width: 50% !important;
+            font-size: 12px !important;
+        }
+        .banner-button-mobile
+        {
+            display: inline-flex !important;
+            position: relative;
+            top: -10px;
+            padding: 5px 10px;
+            .banner-button-arrow-container
+            {
+                position: relative;
+                top: -10px !important;
+                left: 20px;
+                .banner-button-arrow
+                {
+                    position: absolute;
+                    left: 25%;
+                    top: 50%;
+                    width: 20px !important;
+                    height: 20px !important;
+                }
+            }
+            
+            .banner-button-text
+            {
+                display: none !important;  
+            }
+        }
+
+    }
+    
+
+
+    
+}
