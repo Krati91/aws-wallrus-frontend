@@ -231,10 +231,10 @@ const UploadDesign = (props) => {
   const patternArray = [];
   const colorArray = [];
   const themeArray = [];
-  tags &&
-    tags[2].tags.forEach((current) => {
-      patternArray.push(current.name);
-    });
+  // tags &&
+  //   tags[2].tags.forEach((current) => {
+  //     patternArray.push(current.name);
+  //   });
   tags &&
     tags[1].tags.forEach((current) => {
       themeArray.push(current.name);
