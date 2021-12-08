@@ -21,55 +21,79 @@ const SocialMediaSignUp = (props) => {
   }
 
   const responseGoogle = (response) => {
-
-    dispatch(
-      setGoogleEmail({
-        email_aboutyou: response.profileObj.email
-      }
-      )
-    )
-    dispatch(
-      setGoogleFullName(
-        {
-          fullName: response.profileObj.name
+    // console.log('GOOGLE', response);
+    googleLogin(response.accessToken)
+      .then((res) => {
+        if (res) {
+          setIsAuth(true);
+          history.push('/home');
+        } else {
+          alert('Error Logging In');
         }
-      )
-    )
+      })
   }
+
+  // const responseGoogle = (response) => {
+
+  //   dispatch(
+  //     setGoogleEmail({
+  //       email_aboutyou: response.profileObj.email
+  //     }
+  //     )
+  //   )
+  //   dispatch(
+  //     setGoogleFullName(
+  //       {
+  //         fullName: response.profileObj.name
+  //       }
+  //     )
+  //   )
+  // }
 
   const responseGoogleError = (err) => {
     console.log(err);
+  }
+
+  const responseFacebook = (response) => {
+    // console.log("FACEBOOK", response);
+    facebookLogin(response.accessToken)
+      .then((res) => {
+        if (res) {
+          setIsAuth(true);
+          history.push('/home');
+        } else {
+          alert('Error Logging In');
+        }
+      })
   }
 
   return (
     <>
       <Grid container spacing={2}>
         <Grid item sm={6} xs={12}>
-          <GoogleLogin
+        <GoogleLogin
             clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
             buttonText="Login with Google"
             onSuccess={responseGoogle}
             onFailure={responseGoogleError}
             render={renderProps => (
               <Button onClick={renderProps.onClick} variant="contained" className="googleBtn" >
-                <img src={google} alt="google" className="googleImg" /><span className='span-left'>Sign up with Google</span>
+                <img src={google} alt="google" className="googleImg" /><span className='span-left'>Signup with Google</span>
               </Button>
             )}
           />
         </Grid>
         <Grid item sm={6} xs={12}>
-          <FacebookLogin
-            textButton="Login with Faceboook"
-            appId="1211209809325082"
+        <FacebookLogin
+            appId={process.env.REACT_APP_FACEBOOK_CLIENT_ID}
             fields="name,email,picture"
-            callback={fbResponse}
+            callback={responseFacebook}
             render={renderProps => (
-              <Button variant="contained" onClick={renderProps.onClick} className="facebookBtn">
-                <img src={facebook} alt="facebook" className="facebookImg" /><span className='span-left'>Sign up with Facebook</span>
+              <Button onClick={renderProps.onClick} variant="contained" className="facebookBtn">
+                <img src={facebook} alt="facebook" className="facebookImg" /><span className='span-left'>Signup with Facebook</span>
               </Button>
             )}
           />
-
         </Grid>
       </Grid>
       <div className="orContainer">

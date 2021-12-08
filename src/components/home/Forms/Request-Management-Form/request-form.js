@@ -11,6 +11,8 @@ import {
 } from "@material-ui/core";
 import { useState } from "react";
 import { withStyles } from "@material-ui/core/styles";
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import AlertCircle from "../../../../images/alert-circle.svg";
 import Footer from "../../footer/footer";
 import MainNav from "../../main-nav/main-nav";
@@ -79,6 +81,11 @@ const RequestForm = () => {
     "2:00 pm - 6:00 pm",
     "6:00 pm - 9:00 pm",
   ];
+  const [selectTime, setSelectTime] = useState(timeFrames[1]);
+  const handleChange = (event, timeFrame) => {
+    setSelectTime(timeFrame);
+    console.log('timeFrame', timeFrame);
+  };
 
   const theme = createMuiTheme({
     palette: {
@@ -151,26 +158,28 @@ const RequestForm = () => {
   const onSubmitHandler = async () => {
     if (validation()) {
       setSubmitLoader(true);
-      try {
-        await requestMeasurement({
-          name,
-          line1,
-          line2,
-          state,
-          city,
-          pincode,
-          smartDate,
-          timeFrame,
-          remark,
-          siteImages,
-        });
-        setSubmitLoader(false);
-        reset();
-        alert("Measurement requested successfully");
-      } catch (err) {
-        setSubmitLoader(false);
-        alert("Something went wrong!");
-      }
+
+      requestMeasurement({
+        name,
+        line1,
+        line2,
+        state,
+        city,
+        pincode,
+        smartDate,
+        timeFrame,
+        remark,
+        siteImages,
+      }).then((res) => {
+        if (res) {
+          setSubmitLoader(false);
+          reset();
+          alert("Measurement requested successfully");
+        } else {
+          setSubmitLoader(false);
+          alert("Something went wrong!");
+        }
+      })
     }
   };
 
@@ -309,7 +318,7 @@ const RequestForm = () => {
               />
 
               <h2>Timeframe of measurement</h2>
-              <ButtonGroup
+              {/* <ButtonGroup
                 className="select-time"
                 color="primary"
                 aria-label="outlined primary button group"
@@ -321,7 +330,27 @@ const RequestForm = () => {
                     </Button>
                   );
                 })}
-              </ButtonGroup>
+              </ButtonGroup> */}
+
+              <ToggleButtonGroup
+                className="select-time"
+                color="primary"
+                value={selectTime}
+                exclusive
+                onChange={handleChange}
+              >
+                {
+                  timeFrames.map((time) => {
+                    return (
+                      <ToggleButton value={time}>{time.toUpperCase()}</ToggleButton>
+                    )
+                  })
+                }
+                {/* <ToggleButton value="web">Web</ToggleButton>
+                <ToggleButton value="android">Android</ToggleButton>
+                <ToggleButton value="ios">iOS</ToggleButton> */}
+              </ToggleButtonGroup>
+
               {!validate.timeFrame && (
                 <Typography style={{ color: "red" }}>
                   Please select a Time Frame of measurement
@@ -442,8 +471,8 @@ const RequestForm = () => {
                 {submitLoader ? (
                   <CircularProgress style={{ color: "#fff" }} size={30} />
                 ) : (
-                  "Submit"
-                )}
+                    "Submit"
+                  )}
               </Button>
             </Grid>
           </Grid>

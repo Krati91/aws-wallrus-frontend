@@ -28,7 +28,6 @@ export const googleLogin = async (token) => {
 }
 
 export const facebookLogin = async (token) => {
-
   let response;
 
   const facebookData = {
@@ -40,7 +39,7 @@ export const facebookLogin = async (token) => {
   }
 
   const loginFormData = new FormData();
-  Object.keys(facebookData).forEach((key) => loginFormData.append(key, facebookData[key]))
+  Object.keys(facebookData).forEach((key) => loginFormData.append(key, facebookData[key]));
 
   await axios.post('/auth/convert-token/', loginFormData)
     .then((res) => {

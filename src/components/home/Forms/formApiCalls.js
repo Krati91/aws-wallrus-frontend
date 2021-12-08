@@ -44,6 +44,7 @@ export const customizeDesign = async ({
   unit,
   uploadImages,
 }) => {
+  let formresponse;
   const formData = new FormData();
   formData.append("name", name);
   formData.append("phone_number", phone);
@@ -58,7 +59,12 @@ export const customizeDesign = async ({
   if (uploadImages[2]) formData.append("image3", uploadImages[2]);
   if (uploadImages[3]) formData.append("image4", uploadImages[3]);
 
-  await axios.post("/api/customize-design", formData);
+  await axios.post("/api/customize-design", formData)
+    .then((res) => {
+      formresponse = res.data;
+    }).catch((err) => console.log('Error while Customizing design', err));
+
+  return formresponse;
 };
 
 export const requestMeasurement = async ({
@@ -73,6 +79,7 @@ export const requestMeasurement = async ({
   remark,
   siteImages,
 }) => {
+  let formresponse;
   const formData = new FormData();
   formData.append("name", name);
   formData.append("line1", line1);
@@ -87,14 +94,20 @@ export const requestMeasurement = async ({
   if (siteImages[1]) formData.append("site_image2", siteImages[1]);
   if (siteImages[2]) formData.append("site_image3", siteImages[2]);
   if (siteImages[3]) formData.append("site_image4", siteImages[3]);
-  await axios.post("/api/request-measurement", formData);
+
+  await axios.post("/api/request-measurement", formData)
+    .then((res) => {
+      formresponse = res.data;
+    }).catch((err) => console.log('Error while sending request', err));
+
+  return formresponse;
 };
 
 export const getApplications = async () => {
   let response;
   await axios.get(`/api/app-list/`)
     .then((res) => {
-      console.log('asdasd', res.data);
+      // console.log('asdasd', res.data);
       response = res.data;
     }).catch((err) => console.log('Could not get the application-list', err));
 

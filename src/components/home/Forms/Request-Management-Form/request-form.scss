@@ -111,10 +111,18 @@
 }
 
 .select-time {
-  display: grid !important;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  // display: grid !important;
+  // grid-template-columns: repeat(4, 1fr);
+  // grid-gap: 40px;
+  // flex-wrap: wrap;
+  // overflow-x: scroll;
+  // overflow-y: hidden;
+  // padding: 0 0.8rem 0.8rem 0;
   button {
+    width: max-content;
     font-style: normal !important;
     font-weight: 500 !important;
     font-size: 14px !important;
@@ -129,6 +137,10 @@
       background-color: #000 !important;
       color: #fff !important;
     }
+  }
+  .Mui-selected {
+    background-color: #000 !important;
+    color: #fff !important;
   }
 }
 

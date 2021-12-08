@@ -95,7 +95,6 @@ const UploadDesignForm = (props) => {
         setProduct([]);
         setProdLoader(false);
       }
-
     });
 
     setWidth(widths[0]);

@@ -51,10 +51,7 @@ const CustomizeDesignForm = (props) => {
   const [remark, setRemark] = useState("");
   const [application, setApplication] = useState();
   const [product, setProduct] = useState();
-  const [width, setWidth] = useState();
-  const [height, setHeight] = useState();
   const [submitLoader, setSubmitLoader] = useState(false);
-  const [unit, setUnit] = useState();
   const [uploadImages, setUploadImages] = useState([]);
   const [validate, setValidate] = useState({
     name: true,
@@ -70,30 +67,42 @@ const CustomizeDesignForm = (props) => {
   const [heights, setHeights] = useState(["110", "210", "310", "410"]);
   const [units, setUnits] = useState(["CM", "M", "FT"]);
   const classes = useStyles();
+
+  const [width, setWidth] = useState(widths[0]);
+  const [height, setHeight] = useState(heights[0]);
+  const [unit, setUnit] = useState(units[0]);
+
   let upload;
 
   useEffect(() => {
-    const init = async () => {
-      try {
-        const appsResponse = await getApplications();
-        setAppList(appsResponse.data);
-        setApplication(appsResponse.data[0].slug);
-        const prodsResponse = await getProducts(appsResponse.data[0].slug);
-        setProducts(prodsResponse.data);
-        setProduct(prodsResponse.data[0].slug);
-        setWidth(widths[0]);
-        setHeight(heights[0]);
-        setUnit(units[0]);
-        setProdLoader(false);
+    getApplications().then((appsResponse) => {
+      if (appsResponse && appsResponse.length !== 0) {
+        setAppList(appsResponse);
+        setApplication(appsResponse[0].slug);
         setAppLoader(false);
-      } catch (err) {
-        setProdLoader(false);
+
+        getProducts(appsResponse[0].slug).then((prodsResponse) => {
+          if (prodsResponse) {
+            setProducts(prodsResponse);
+            setProduct(prodsResponse[0].slug);
+            setProdLoader(false);
+          }
+        });
+      } else {
+        setAppList([{
+          name: "No applications found",
+          slug: "no data found"
+        }]);
+        setApplication("No application found");
         setAppLoader(false);
-        console.log(err);
-        alert("Something went wrong!");
+        setProducts([{
+          name: "No products found",
+          slug: "no data found"
+        }]);
+        setProduct([]);
+        setProdLoader(false);
       }
-    };
-    init();
+    });
   }, []);
 
   console.log(appList, product);
@@ -123,26 +132,27 @@ const CustomizeDesignForm = (props) => {
   const onSubmitHandler = async () => {
     if (validation()) {
       setSubmitLoader(true);
-      try {
-        await customizeDesign({
-          name,
-          phone,
-          remark,
-          uploadImages,
-          width,
-          height,
-          unit,
-          application,
-          product,
-        });
-        setSubmitLoader(false);
-        alert("Design customized successfully");
-        reset();
-      } catch (err) {
-        setSubmitLoader(false);
-        console.log(err);
-        alert("Couldn't customize design");
-      }
+
+      customizeDesign({
+        name,
+        phone,
+        remark,
+        uploadImages,
+        width,
+        height,
+        unit,
+        application,
+        product,
+      }).then((res) => {
+        if (res) {
+          setSubmitLoader(false);
+          alert("Design customized successfully");
+          reset();
+        } else {
+          setSubmitLoader(false);
+          alert("Couldn't customize design");
+        }
+      })
     }
   };
 
@@ -227,20 +237,20 @@ const CustomizeDesignForm = (props) => {
                   className={classes.skeleton}
                 />
               ) : (
-                <div>
-                  <p>Select applications</p>
-                  <Select
-                    fullWidth
-                    value={application}
-                    variant="outlined"
-                    onChange={(e) => onApplicationChange(e)}
-                  >
-                    {appList.map((app) => (
-                      <MenuItem value={app.slug}>{app.name}</MenuItem>
-                    ))}
-                  </Select>
-                </div>
-              )}
+                  <div>
+                    <p>Select applications</p>
+                    <Select
+                      fullWidth
+                      value={application}
+                      variant="outlined"
+                      onChange={(e) => onApplicationChange(e)}
+                    >
+                      {appList.map((app) => (
+                        <MenuItem value={app.slug}>{app.name}</MenuItem>
+                      ))}
+                    </Select>
+                  </div>
+                )}
               {prodLoader ? (
                 <Skeleton
                   animation="wave"
@@ -248,20 +258,20 @@ const CustomizeDesignForm = (props) => {
                   className={classes.skeleton}
                 />
               ) : (
-                <div style={{ marginTop: "30px" }}>
-                  <p>Select products</p>
-                  <Select
-                    fullWidth
-                    value={product}
-                    variant="outlined"
-                    onChange={(e) => setProduct(e.target.value)}
-                  >
-                    {products.map((app) => (
-                      <MenuItem value={app.slug}>{app.design_name}</MenuItem>
-                    ))}
-                  </Select>
-                </div>
-              )}
+                  <div style={{ marginTop: "30px" }}>
+                    <p>Select products</p>
+                    <Select
+                      fullWidth
+                      value={product}
+                      variant="outlined"
+                      onChange={(e) => setProduct(e.target.value)}
+                    >
+                      {products.map((app) => (
+                        <MenuItem value={app.slug}>{app.design_name}</MenuItem>
+                      ))}
+                    </Select>
+                  </div>
+                )}
               <div>
                 <p>Dimensions</p>
                 <div className="customize-design-dimensions-container">
@@ -421,8 +431,8 @@ const CustomizeDesignForm = (props) => {
                 {submitLoader ? (
                   <CircularProgress size={30} style={{ color: "#fff" }} />
                 ) : (
-                  "Submit"
-                )}
+                    "Submit"
+                  )}
               </Button>
               <span className="helper-text-custom-design-form">
                 {
