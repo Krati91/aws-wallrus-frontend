@@ -81,10 +81,10 @@ const RequestForm = () => {
     "2:00 pm - 6:00 pm",
     "6:00 pm - 9:00 pm",
   ];
-  const [selectTime, setSelectTime] = useState(timeFrames[1]);
+  const [timeFrame, setTimeFrame] = useState(timeFrames[1]);
   const handleChange = (event, timeFrame) => {
-    setSelectTime(timeFrame);
-    console.log('timeFrame', timeFrame);
+    setTimeFrame(timeFrame);
+    // console.log('timeFrame', timeFrame);
   };
 
   const theme = createMuiTheme({
@@ -335,7 +335,7 @@ const RequestForm = () => {
               <ToggleButtonGroup
                 className="select-time"
                 color="primary"
-                value={selectTime}
+                value={timeFrame}
                 exclusive
                 onChange={handleChange}
               >
@@ -346,9 +346,6 @@ const RequestForm = () => {
                     )
                   })
                 }
-                {/* <ToggleButton value="web">Web</ToggleButton>
-                <ToggleButton value="android">Android</ToggleButton>
-                <ToggleButton value="ios">iOS</ToggleButton> */}
               </ToggleButtonGroup>
 
               {!validate.timeFrame && (
