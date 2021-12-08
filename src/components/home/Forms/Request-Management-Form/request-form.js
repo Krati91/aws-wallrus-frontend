@@ -52,7 +52,6 @@ const RequestForm = () => {
   const [pincode, setPincode] = useState("");
   const [date, setDate] = useState("");
   const [smartDate, setSmartDate] = useState("");
-  const [timeFrame, setTimeFrame] = useState("");
   const [remark, setRemark] = useState("");
   const [siteImages, setSiteImages] = useState([]);
   const [validate, setValidate] = useState({
@@ -81,9 +80,9 @@ const RequestForm = () => {
     "2:00 pm - 6:00 pm",
     "6:00 pm - 9:00 pm",
   ];
-  const [timeFrame, setTimeFrame] = useState(timeFrames[1]);
+  const [selectedTime, setSelectedTime] = useState(timeFrames[1]);
   const handleChange = (event, timeFrame) => {
-    setTimeFrame(timeFrame);
+    setSelectedTime(timeFrame);
     // console.log('timeFrame', timeFrame);
   };
 
@@ -102,7 +101,7 @@ const RequestForm = () => {
     const isstate = state.length > 0;
     const iscity = city.length > 0;
     const isdate = validator.isDate(date);
-    const istimeFrame = timeFrame.length > 0;
+    const istimeFrame = selectedTime.length > 0;
     const ispincode = pincode.length === 6;
     const isremark = remark.length > 0;
     const issiteImages = siteImages.length > 0;
@@ -141,7 +140,7 @@ const RequestForm = () => {
     setCity("");
     setState("");
     setDate("");
-    setTimeFrame("");
+    setSelectedTime(timeFrames[1]);
     setPincode("");
     setRemark("");
     setSiteImages([]);
@@ -167,7 +166,7 @@ const RequestForm = () => {
         city,
         pincode,
         smartDate,
-        timeFrame,
+        selectedTime,
         remark,
         siteImages,
       }).then((res) => {
@@ -335,7 +334,7 @@ const RequestForm = () => {
               <ToggleButtonGroup
                 className="select-time"
                 color="primary"
-                value={timeFrame}
+                value={selectedTime}
                 exclusive
                 onChange={handleChange}
               >
