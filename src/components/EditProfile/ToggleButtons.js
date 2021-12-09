@@ -33,6 +33,8 @@ const ToggleButtons = (props) =>
     const favouriteFrequency = useSelector(selectFavouriteFrequency)
     const paymentFrequency = useSelector(selectPaymentsFrequency)
 
+    console.log(purchaseFrequency);
+    
     const value = (value) => {
       if(value === 'followerNotification')
       {

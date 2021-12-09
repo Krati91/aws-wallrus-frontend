@@ -311,7 +311,7 @@ const Product = (props) => {
                                   <img
                                     onClick={changeImage}
                                     id={index}
-                                    src={`${process.env.REACT_APP_ROOT_URL}/${current.image}`}
+                                    src={`${process.env.REACT_APP_ROOT_URL}${current.image}`}
                                     alt="product"
                                     className="product-images"
                                   />
@@ -327,7 +327,7 @@ const Product = (props) => {
                           <img
                             checked={checked}
                             onClick={viewProductImage}
-                            src={`${process.env.REACT_APP_ROOT_URL}/${selectedImage}`}
+                            src={`${process.env.REACT_APP_ROOT_URL}${selectedImage}`}
                             alt="product"
                             className="selected-product-image"
                           />
@@ -362,7 +362,7 @@ const Product = (props) => {
                                   >
                                     <img
                                       id={index}
-                                      src={`${process.env.REACT_APP_ROOT_URL}/${current.image}`}
+                                      src={`${process.env.REACT_APP_ROOT_URL}${current.image}`}
                                       alt="product"
                                       className="carousel-product-images"
                                     />

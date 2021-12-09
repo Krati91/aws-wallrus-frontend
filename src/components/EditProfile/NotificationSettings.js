@@ -19,13 +19,14 @@ const useStyles = makeStyles(theme => ({
 
 
 const Notifications = (props) => {
+  const userType = window.localStorage.getItem("User_Type");
   const classes = useStyles()
   const [count, setCount] = useState(0)
   const dispatch = useDispatch()
   const designViewFrequency = useSelector(selectDesignView)
   const handleChange = (value) => {
     setCount(1)
-    console.log(value)
+    console.log(value.name)
     if (value.name === 'followerNotification') {
       dispatch(
         setNewFollowerNotification(
@@ -66,12 +67,32 @@ const Notifications = (props) => {
     }
   }
 
+  let notificationTitles = [];
+
+  if (userType === "Interior Decorator") {
+    notificationTitles = [
+      "Purchase and commission updates:", 
+      "Whenever my following artist upload new designs:", 
+      "My order status:", 
+      "Whenever new artist joins the platform:", 
+      "Blogs, newsletters and event notification:", 
+    ];
+  } else if (userType === "Artist") {
+    notificationTitles = [
+      "When I get a new follower:", 
+      "When I receive payments from The Wallrus Company:", 
+      "When someone views my design:", 
+      "When someone favourites my design:", 
+      "When someone purchases my design:", 
+    ];
+  }
+
   return (
     <div>
       {/* {console.log(count)} */}
       <div>
 
-        <h4>When I get a new follower:</h4>
+        <h4>{notificationTitles[0]}</h4>
         {
           designViewFrequency === '' ?
             (
@@ -102,7 +123,7 @@ const Notifications = (props) => {
       </div>
       <div>
 
-        <h4>When I receive payments from The Wallrus Company:</h4>
+        <h4>{notificationTitles[1]}</h4>
         {
           designViewFrequency === '' ?
             (
@@ -134,7 +155,7 @@ const Notifications = (props) => {
       <div>
 
         <h4>
-          When someone views my design:
+        {notificationTitles[2]}
                 </h4>
         {
           designViewFrequency === '' ?
@@ -166,7 +187,7 @@ const Notifications = (props) => {
       <div>
 
         <h4>
-          When someone favourites my design:
+        {notificationTitles[3]}
                 </h4>
         {
           designViewFrequency === '' ?
@@ -199,7 +220,7 @@ const Notifications = (props) => {
       <div>
 
         <h4>
-          When someone purchases my design:
+        {notificationTitles[4]}
                 </h4>
         {
           designViewFrequency === '' ?

@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import "./forgot-password.scss";
 
-import { Button, Box, CircularProgress } from "@material-ui/core";
+import { Button, CircularProgress } from "@material-ui/core";
 import Input from "../input/input";
-import { useParams } from "react-router";
+import { useParams, useLocation, useHistory } from "react-router";
 import Logo from "../../images/logo.svg";
-// import ChevronLeft from "../../images/chevron-left.svg";
+import axios from "axios";
+
+function useQuery() {
+  const { search } = useLocation();
+
+  return React.useMemo(() => new URLSearchParams(search), [search]);
+}
 
 const ForgotPassword = () => {
   const [newPassword, setNewPassword] = useState("");
@@ -16,6 +22,8 @@ const ForgotPassword = () => {
     confirmNewPassword: true,
   });
   const { email } = useParams();
+  const query = useQuery();
+  const history = useHistory();
 
   const validation = () => {
     const isNewPassword = newPassword.length >= 7;
@@ -28,19 +36,35 @@ const ForgotPassword = () => {
 
     return isNewPassword && isConfirmNewPassword;
   };
-  const onSubmitHandler = () => {
+
+  const onSubmitHandler = async () => {
     const shouldSubmit = validation();
     if (shouldSubmit) {
-      console.log("Submitted");
+      setLoader(true);
+      try {
+        const formData = new FormData();
+        formData.append("uidb64", query.get("uidb64"));
+        formData.append("token", query.get("token"));
+        formData.append("password", newPassword);
+        await axios.patch("/api/password-reset-complete", formData);
+
+        setLoader(false);
+        alert("Your password was changed successfully");
+        history.replace("/login");
+      } catch (err) {
+        setLoader(false);
+        alert("Couldn't change your password. Please try again");
+      }
     }
   };
 
   return (
     <div className="forgot-password-container">
       <img src={Logo} alt="logo" />
-      <p>Set New Password for {email}</p>
+      <p className="forgot-password-title">Set New Password for {email}</p>
       <div className="forgot-password-form" fullWidth>
         <Input
+          type="password"
           value={newPassword}
           placeholder="New password"
           onChange={(e) => setNewPassword(e.target.value)}
@@ -52,6 +76,7 @@ const ForgotPassword = () => {
           }
         />
         <Input
+          type="password"
           value={confirmNewPassword}
           placeholder="Confirm new password"
           onChange={(e) => setConfirmNewPassword(e.target.value)}

@@ -76,6 +76,8 @@ const ProductCard = (props) => {
     </svg>
   );
 
+  console.log(props.designImage);
+
   return (
     <Box gap={1} className="prod-card">
       <img
@@ -88,9 +90,13 @@ const ProductCard = (props) => {
       <Box style={{ display: "flex", alignItems: "center" }} gridGap={10}>
         {props.general && (
           <>
-            <Avatar>
-              <img src={props.designerImage} alt="img" />
-            </Avatar>
+            {!props.designerImage ? (
+              <Avatar />
+            ) : (
+              <Avatar>
+                <img src={props.designerImage} alt="img" />
+              </Avatar>
+            )}
             <p
               className="x-bold prod-card--designer-name"
               style={{ marginRight: "auto" }}

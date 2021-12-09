@@ -18,7 +18,7 @@ const Applications = (props) => {
     productList: false,
     filters: false,
   });
-  const [listLoader, setListLoader] = useState(true);
+  const [listLoader, setListLoader] = useState(false);
   const [filtersList, setFiltersList] = useState([]);
 
   //   useEffect(async() => {
@@ -69,7 +69,8 @@ const Applications = (props) => {
   ];
   useEffect(() => {
     setApiStatus({ ...apiStatus, productList: false, filters: false });
-
+    setListLoader(true);
+    
     if (props.application === "wallpaper" && props.tabvalue === 0) {
       productList("wallpaper").then((productsList) => {
         if (productsList) {
@@ -363,7 +364,7 @@ const Applications = (props) => {
                           onClick={viewProduct}
                           designImage={
                             item.productimages_set.length !== 0
-                              ? item.productimages_set[0].image
+                              ? `${process.env.REACT_APP_ROOT_URL}${item.productimages_set[0].image}`
                               : design1
                           }
                           designerName={item.artist}

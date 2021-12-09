@@ -129,14 +129,23 @@ const CustomButton = (props) => {
 
     }, [currentTab])
 
+    const userType = window.localStorage.getItem("User_Type");
 
 
-
-    const changedValuesNotification =
+    let changedValuesNotification =
     {
         design_purchase_frequency: purchaseFrequency, follower_frequency: followerFrequency, design_view_frequency: designViewFrequency, design_favorite_frequency: favouriteFrequency, payment_frequency: paymentFrequency
     }
 
+    if (userType === "Interior Decorator") {
+      changedValuesNotification = {
+        purchase_commision_update_frequency: purchaseFrequency, 
+        followed_artist_new_design_update_frequency: followerFrequency, 
+        order_status_frequency: designViewFrequency, 
+        new_artist_joined_frequency: favouriteFrequency, 
+        blog_news_event_notification_frequency: paymentFrequency
+    }
+    }
 
     //formData for notifications
     for (var key in changedValuesNotification) {

@@ -1,18 +1,41 @@
 import React, { useEffect, useState } from "react";
 import {
-  TextField,
   ThemeProvider,
   createMuiTheme,
   Button,
+  Snackbar,
+  CircularProgress,
 } from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
 import validator from "validator";
 import { useHistory } from "react-router";
 import "./input-modal.scss";
 import Input from "../input/input";
+import axios from "axios";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const InputModal = (props) => {
   const [email, setEmail] = useState("");
   const [validate, setValidate] = useState({ email: true });
+  const [open, setOpen] = React.useState(false);
+  const [loader, setLoader] = React.useState(false);
+  const [status, setStatus] = React.useState("");
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const theme = createMuiTheme({
     palette: {
       primary: {
@@ -25,24 +48,27 @@ const InputModal = (props) => {
     resetInputs();
   }, []);
 
-  const history = useHistory();
-
   const validation = () => {
     const isEmail = validator.isEmail(email);
     setValidate({ email: isEmail });
     return isEmail;
   };
 
-  const onSubmitHandler = () => {
+  const onSubmitHandler = async () => {
     const enable = validation();
     if (enable) {
-      // Api call goes here
+      setLoader(true);
       try {
-        // Redirecting to forgot password page
-        history.push(`/forgot-password/${email}`);
+        const formData = new FormData();
+        formData.append("email", email);
+        await axios.post("/api/reset-email", formData);
+        setStatus("success");
+        setLoader(false);
       } catch (err) {
-        alert("Something went wrong");
+        setStatus("error");
+        setLoader(false);
       }
+      handleClick();
     }
   };
 
@@ -50,6 +76,33 @@ const InputModal = (props) => {
     setEmail("");
     setValidate({ email: true });
   };
+
+  let alert = (
+    <Snackbar
+      open={open}
+      autoHideDuration={6000}
+      onClose={handleClose}
+      style={{ zIndex: 3000 }}
+    >
+      <Alert onClose={handleClose} severity="success" style={{ width: "100%" }}>
+        We sent an email to reset your password
+      </Alert>
+    </Snackbar>
+  );
+  if (status === "error") {
+    alert = (
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        style={{ zIndex: 3000 }}
+      >
+        <Alert onClose={handleClose} severity="error" style={{ width: "100%" }}>
+          Couldn't send email. Please try again
+        </Alert>
+      </Snackbar>
+    );
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -66,12 +119,17 @@ const InputModal = (props) => {
         <Button
           variant="contained"
           color="primary"
-          style={{ marginTop: 15 }}
           onClick={onSubmitHandler}
+          style={{ marginTop: 30 }}
         >
-          Submit
+          {loader ? (
+            <CircularProgress size={30} style={{ color: "#fff" }} />
+          ) : (
+            "Submit"
+          )}
         </Button>
       </div>
+      {alert}
     </ThemeProvider>
   );
 };

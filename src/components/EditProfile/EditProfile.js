@@ -323,31 +323,60 @@ const Editprofile = (props) => {
   };
 
   const NotificationSettingsDispatch = (Notification) => {
-    dispatch(
-      setNewFollowerNotification({
-        follower_frequency: Notification.follower_frequency,
-      })
-    );
-    dispatch(
-      setDesignsViewNotification({
-        designs_view_frequency: Notification.design_view_frequency,
-      })
-    );
-    dispatch(
-      setFavouriteNotification({
-        favourite_frequency: Notification.design_favorite_frequency,
-      })
-    );
-    dispatch(
-      setPurchaseNotification({
-        purchase_frequency: Notification.design_purchase_frequency,
-      })
-    );
-    dispatch(
-      setPaymentsNotification({
-        payments_frequency: Notification.payment_frequency,
-      })
-    );
+    if (user_type === "Artist") {
+
+      dispatch(
+        setNewFollowerNotification({
+          follower_frequency: Notification.follower_frequency,
+        })
+      );
+      dispatch(
+        setDesignsViewNotification({
+          designs_view_frequency: Notification.design_view_frequency,
+        })
+      );
+      dispatch(
+        setFavouriteNotification({
+          favourite_frequency: Notification.design_favorite_frequency,
+        })
+      );
+      dispatch(
+        setPurchaseNotification({
+          purchase_frequency: Notification.design_purchase_frequency,
+        })
+      );
+      dispatch(
+        setPaymentsNotification({
+          payments_frequency: Notification.payment_frequency,
+        })
+      );
+    } else if (user_type === "Interior Decorator") {
+      dispatch(
+        setNewFollowerNotification({
+          follower_frequency: Notification.purchase_commision_update_frequency,
+        })
+      );
+      dispatch(
+        setDesignsViewNotification({
+          designs_view_frequency: Notification.order_status_frequency,
+        })
+      );
+      dispatch(
+        setFavouriteNotification({
+          favourite_frequency: Notification.new_artist_joined_frequency,
+        })
+      );
+      dispatch(
+        setPurchaseNotification({
+          purchase_frequency: Notification.blog_news_event_notification_frequency,
+        })
+      );
+      dispatch(
+        setPaymentsNotification({
+          payments_frequency: Notification.followed_artist_new_design_update_frequency,
+        })
+      );
+    }
   };
 
   const [editProfileLoading, setEditProfileLoading] = useState(false);
@@ -381,6 +410,7 @@ const Editprofile = (props) => {
         Notificationsettings(accessToken, refreshToken)
           .then((notificationSettings) => {
             // console.log(notificationSettings);
+            console.log(notificationSettings);
             NotificationSettingsDispatch(notificationSettings);
           })
           .catch((refreshed_data) => {
