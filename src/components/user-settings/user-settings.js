@@ -111,7 +111,7 @@ const UserSettings = (props) => {
           {userType !== "Artist" && (
             <React.Fragment>
               <ul className="user-settings-list">
-                <Link to="/myorder" style={{ textDecoration: "none" }}>
+                <Link to="/userprofile" style={{ textDecoration: "none" }}>
                   <li id="3" onClick={handleTabs}>
                     <img
                       src={cartIcon}
@@ -181,7 +181,7 @@ const UserSettings = (props) => {
             <React.Fragment>
               <hr className="divider" />
               <ul className="user-settings-list">
-                <Link to="/invitefriends" style={{ textDecoration: "none" }}>
+                <Link to="/userprofile" style={{ textDecoration: "none" }}>
                   <li id="6" onClick={handleTabs}>
                     <img
                       src={InviteFriendsIcon}

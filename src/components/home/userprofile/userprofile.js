@@ -11,6 +11,7 @@ import {
   Tab,
   makeStyles,
 } from "@material-ui/core";
+import Skeleton from '@material-ui/lab/Skeleton';
 import CircularProgress from "@material-ui/core/CircularProgress";
 import PropTypes from "prop-types";
 import userImg from "../../../images/model.svg";
@@ -84,7 +85,7 @@ const UserProfile = (props) => {
     first_name: "",
     last_name: "",
     level: "",
-    profile_picture: "",
+    profile_picture: undefined,
   });
   const [designContents, setdesignContents] = useState([]);
 
@@ -152,7 +153,7 @@ const UserProfile = (props) => {
           first_name: res.first_name,
           last_name: res.last_name,
           level: res.level,
-          profile_picture: "",
+          profile_picture: res.profile_picture,
         });
       })
       .catch((err) => alert("Couldn't fetch your details"));
@@ -186,15 +187,18 @@ const UserProfile = (props) => {
               }}
             >
               <div className="user-profile-img-container">
-                <img
-                  src={
-                    userDetails.profile_picture
-                      ? userDetails.profile_picture
-                      : userImg
-                  }
-                  className="user-profile-img"
-                  alt=""
-                />
+                {
+                  userDetails.profile_picture
+                    ? (
+                      <img src={userDetails.profile_picture !== '' ? `${process.env.REACT_APP_ROOT_URL}${userDetails.profile_picture}` : userImg
+                      }
+                        className="user-profile-img"
+                        alt="user profile"
+                      />
+                    ) : (
+                      <Skeleton animation="wave" height={120} width={120} style={{ borderRadius: '50%', transform: 'none' }} />
+                    )
+                }
               </div>
 
               <div className="user-profile-details-container">
@@ -270,19 +274,19 @@ const UserProfile = (props) => {
                     No data to show
                   </div>
                 ) : (
-                  designContents.map((item, index) => (
-                    <>
-                      <ProductCard
-                        key={index}
-                        id={index}
-                        image={item.image}
-                        userimg={userImg}
-                        artistname={item.name}
-                        generaldata
-                      />
-                    </>
-                  ))
-                )}
+                      designContents.map((item, index) => (
+                        <>
+                          <ProductCard
+                            key={index}
+                            id={index}
+                            image={item.image}
+                            userimg={userImg}
+                            artistname={item.name}
+                            generaldata
+                          />
+                        </>
+                      ))
+                    )}
               </Grid>
             </TabPanel>
             <TabPanel value={value} index={1}>

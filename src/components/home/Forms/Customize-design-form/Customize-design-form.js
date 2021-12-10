@@ -99,7 +99,7 @@ const CustomizeDesignForm = (props) => {
           name: "No products found",
           slug: "no data found"
         }]);
-        setProduct([]);
+        setProduct('No products found');
         setProdLoader(false);
       }
     });
@@ -182,8 +182,18 @@ const CustomizeDesignForm = (props) => {
     setProdLoader(true);
     setApplication(e.target.value);
     getProducts(e.target.value).then((res) => {
-      setProducts(res.data);
-      setProdLoader(false);
+      if (res && res.length !== 0) {
+        setProducts(res);
+        setProduct(res[0].slug);
+        setProdLoader(false);
+      } else {
+        setProdLoader(false);
+        setProducts([{
+          name: "No products found",
+          slug: "no data found"
+        }]);
+        setProduct("No products found");
+      }
     });
   };
 

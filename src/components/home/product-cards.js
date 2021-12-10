@@ -101,7 +101,7 @@ const ProductCard = (props) => {
         <CardMedia className="card-media">
           {/* <div className=""> */}
           <div className="design-img-container">
-            <img src={img} alt="design" className="design-img-shop" id={id} />
+            <img src={`${process.env.REACT_APP_ROOT_URL}/${img}`} alt="design" className="design-img-shop" id={id} />
           </div>
           {/* </div> */}
         </CardMedia>

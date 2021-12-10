@@ -99,7 +99,7 @@ const UserCollections = (props) => {
                       <Grid item lg={4} xl={3} sm={6} xs={12} style={{ marginBottom: "30px" }} key={index}>
                         <Grid container direction="column" spacing={1}>
                           <Grid item xs={12} direction="row">
-                            <img id={item.id} onClick={handleClick} className='img-header' alt="img1" src={item.img[0]}></img>
+                            <img id={item.id} onClick={handleClick} className='img-header' alt="img1" src={`${process.env.REACT_APP_ROOT_URL}/${item.img[0]}`}></img>
                           </Grid>
                           <Grid container direction="row" spacing={1}>
                             <Grid item xs={12} direction="row">
