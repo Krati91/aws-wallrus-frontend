@@ -161,11 +161,11 @@ export default function SignUp() {
 
   let fullName = useSelector(selectFullName);
   let [countForRedux, setcountForRedux] = useState(0);
-  if (countForRedux === 0) {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setComponentCount((prevActiveStep) => prevActiveStep + 1);
-    setcountForRedux(1);
-  }
+  // if (fullName && countForRedux === 0) {
+  //   setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  //   setComponentCount((prevActiveStep) => prevActiveStep + 1);
+  //   setcountForRedux(1);
+  // }
   let otp = null;
   if (showOtp) {
     otp = (
