@@ -62,6 +62,7 @@ const Product = (props) => {
     otherColor: false,
     productDet: false,
   });
+  // const [loader , setLoader] = useState(true);
   const [simDesign, setSimDesign] = useState([]);
   const [otherApp, setOtherApp] = useState([]);
   const [otherColor, setOtherColor] = useState([]);
@@ -84,13 +85,13 @@ const Product = (props) => {
   const [materialTypes, setMaterialTypes] = useState("");
   useEffect(() => {
     mainRef.current.scrollIntoView();
-    setProductStatus({
-      ...productStatus,
-      simDesign: false,
-      otherApp: false,
-      otherColor: false,
-      productDet: false,
-    });
+    // setProductStatus({
+    //   ...productStatus,
+    //   simDesign: false,
+    //   otherApp: false,
+    //   otherColor: false,
+    //   productDet: false,
+    // });
 
     similarDesigns(id).then((similarDesignList) => {
       setSimDesign(similarDesignList.data);
@@ -285,7 +286,7 @@ const Product = (props) => {
         <MainNav />
       </div>
       {
-        // productStatus.simDesign === false || productStatus.otherColor === false) && (productStatus.otherApp === false ||
+        // (productStatus.simDesign === false || productStatus.otherColor === false) && (productStatus.otherApp === false ||
         productStatus.productDet === false ? (
           <div className="product-loader-container">
             <div>
