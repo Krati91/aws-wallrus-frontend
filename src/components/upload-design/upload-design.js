@@ -279,7 +279,10 @@ const UploadDesign = (props) => {
         setLoading(false);
         history.push("/dashboard");
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setLoading(false);
+        alert('Could not upload your design');
+      });
   };
 
   const renderDiv = () => {
