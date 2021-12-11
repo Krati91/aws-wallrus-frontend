@@ -217,24 +217,24 @@ const UploadDesign = (props) => {
         .then((app_list2) => {
           appListDispatch(app_list2);
         })
-        .catch((refreshed_data) => {});
+        .catch((refreshed_data) => { });
 
       TagList(accessToken, refreshToken)
         .then((tag_list) => {
           tagListDispatch(tag_list);
         })
-        .catch((refreshed_data) => {});
+        .catch((refreshed_data) => { });
     }
   }, []);
 
   const tags = useSelector(selectTagList);
-  const patternArray = [];
+  const patternArray = []; // Style tag
   const colorArray = [];
   const themeArray = [];
-  // tags &&
-  //   tags[2].tags.forEach((current) => {
-  //     patternArray.push(current.name);
-  //   });
+  tags &&
+    tags[2].tags.forEach((current) => {
+      patternArray.push(current.name);
+    });
   tags &&
     tags[1].tags.forEach((current) => {
       themeArray.push(current.name);
@@ -380,25 +380,25 @@ const UploadDesign = (props) => {
                     </Grid>
                   </div>
                 ) : (
-                  appList_arr.map((app_list_btn) => {
-                    return (
-                      <Grid item md={3}>
-                        <Button
-                          key={app_list_btn.id}
-                          id={app_list_btn.name}
-                          onClick={handleChangeForApp}
-                          className={
-                            app.find((e) => e === app_list_btn.name)
-                              ? "selected-app"
-                              : "unselected-app"
-                          }
-                        >
-                          {app_list_btn.name}
-                        </Button>
-                      </Grid>
-                    );
-                  })
-                )}
+                    appList_arr.map((app_list_btn) => {
+                      return (
+                        <Grid item md={3}>
+                          <Button
+                            key={app_list_btn.id}
+                            id={app_list_btn.name}
+                            onClick={handleChangeForApp}
+                            className={
+                              app.find((e) => e === app_list_btn.name)
+                                ? "selected-app"
+                                : "unselected-app"
+                            }
+                          >
+                            {app_list_btn.name}
+                          </Button>
+                        </Grid>
+                      );
+                    })
+                  )}
               </Grid>
             </div>
 
@@ -590,14 +590,14 @@ const UploadDesign = (props) => {
                 {loading ? (
                   <CircularProgress size={25} className="button-loader" />
                 ) : (
-                  "Upload Now"
-                )}
+                    "Upload Now"
+                  )}
               </Button>
             ) : (
-              <Button disabled className="upload-design-final-disabled">
-                Upload Now
-              </Button>
-            )}
+                <Button disabled className="upload-design-final-disabled">
+                  Upload Now
+                </Button>
+              )}
           </div>
 
           <div className="back-to-top-upload">
