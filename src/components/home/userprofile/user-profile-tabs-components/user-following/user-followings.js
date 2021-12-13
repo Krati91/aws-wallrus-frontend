@@ -74,11 +74,12 @@ const UserFollowing = (props) => {
         res.forEach((value) => {
           if (value.status) {
             const followingList = {
+              Unique_id: value.Unique_id,
               name: value.full_name,
               artistimg: value.user.profile_picture,
               followers: value.followers,
               Designs: value.Designs,
-              data: [design1, design2, design3],
+              design_images: value.design_images,
             }
             list.push(followingList);
           }
@@ -138,7 +139,7 @@ const UserFollowing = (props) => {
                           <div style={{ padding: "0px 20px" }}>
                             <Grid container spacing={2}>
                               {
-                                item.data.map((item, index) => (
+                                item.design_images.map((item, index) => (
                                   <ProductCard
                                     key={index}
                                     id={index}

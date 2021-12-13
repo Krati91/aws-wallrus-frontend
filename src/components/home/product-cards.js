@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./product-cards.scss";
 import { Grid, Card, CardMedia, Avatar } from "@material-ui/core";
 import Tag from "../../images/tag.svg";
-import design from "../../images/design1.svg";
+import design1 from "../../images/design1.svg";
 
 const CollectionIcon = (props) => {
   return (
@@ -107,7 +107,7 @@ const ProductCard = (props) => {
                 ? (
                   <img src={`${process.env.REACT_APP_ROOT_URL}${designImg}`} alt="design" className="design-img-shop" id={id} />
                 ) : (
-                  <img src={design} alt="alternate Design" />
+                  <img src={design1} alt="alternate Design" />
                 )
             }
           </div>
