@@ -164,6 +164,7 @@ const UserProfile = (props) => {
           const design = {
             name: value.artist,
             image: value.image,
+            artist_image: value.artist_image
           };
           list.push(design);
         });
@@ -280,7 +281,7 @@ const UserProfile = (props) => {
                             key={index}
                             id={index}
                             image={item.image}
-                            userimg={userImg}
+                            userimg={item.artist_image}
                             artistname={item.name}
                             generaldata
                           />

@@ -28,13 +28,13 @@
     align-items: center;
 }
 
-.designRoot
-    {
+.designRoot{
         
         border-radius: 12px !important;
         box-shadow: none;
         background-color: rgba(0,0,0,1) !important;
         position: relative;
+        max-width: 322px !important;
         
         &:hover
         {

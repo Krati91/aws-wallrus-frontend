@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "./product-cards.scss";
-import { Grid, Card, CardMedia } from "@material-ui/core";
+import { Grid, Card, CardMedia, Avatar } from "@material-ui/core";
 import Tag from "../../images/tag.svg";
+import design from "../../images/design1.svg";
 
 const CollectionIcon = (props) => {
   return (
@@ -79,7 +80,7 @@ const ProductCard = (props) => {
   const [liked, setLiked] = useState([null]);
 
   const { key, id, onClick, image, userimg, artistname, height, width } = props;
-  let img = image ? image : "";
+  let designImg = image ? image : "";
 
   return (
     <Grid item xs={6} sm={6} md={4} key={key}>
@@ -101,7 +102,14 @@ const ProductCard = (props) => {
         <CardMedia className="card-media">
           {/* <div className=""> */}
           <div className="design-img-container">
-            <img src={`${process.env.REACT_APP_ROOT_URL}/${img}`} alt="design" className="design-img-shop" id={id} />
+            {
+              designImg
+                ? (
+                  <img src={`${process.env.REACT_APP_ROOT_URL}${designImg}`} alt="design" className="design-img-shop" id={id} />
+                ) : (
+                  <img src={design} alt="alternate Design" />
+                )
+            }
           </div>
           {/* </div> */}
         </CardMedia>
@@ -111,12 +119,17 @@ const ProductCard = (props) => {
           <div className="design-artist-name-profilepic">
             {userimg !== "" && (
               <div className="design-artist-photo-container">
-                <img
-                  src={userimg}
-                  alt="design-artist"
-                  className="design-artist-photo"
-                  style={{ borderRadius: "50%" }}
-                />
+                {
+                  userimg ?
+                    (
+                      <img
+                        src={`${process.env.REACT_APP_ROOT_URL}${userimg}`}
+                        alt="design-artist"
+                        className="design-artist-photo"
+                        style={{ borderRadius: "50%" }}
+                      />
+                    ) : <Avatar />
+                }
               </div>
             )}
             <div className="design-artist-name-container">
