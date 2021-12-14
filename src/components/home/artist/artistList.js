@@ -13,8 +13,9 @@ import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import "./artistList.scss";
 import { ArtistListStatus } from "../../../apis/apiCalls";
-import { ArtistListStatusPost } from "../../../apis/apiCalls";
+import { followArtist } from "../../../apis/apiCalls";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Artistitem from "./artistItem";
 
 const ArtistList = (props) => {
   const [selectedFilter, setFilter] = useState("");
@@ -30,6 +31,7 @@ const ArtistList = (props) => {
     if (accessToken && refreshToken) {
       ArtistListStatus(accessToken, refreshToken)
         .then((artist_data_status) => {
+          console.log(artist_data_status);
           setArtist(artist_data_status);
           setLoader(true);
         })
@@ -39,20 +41,6 @@ const ArtistList = (props) => {
         });
     }
   }, []);
-
-  const handleFollow = (e) => {
-    let formData = new FormData();
-    formData.append("id", e.target.id);
-
-    ArtistListStatusPost(accessToken, refreshToken, formData)
-      .then((data) => {
-        console.log(data);
-        // window.location.reload();
-      })
-      .catch((messed) => {
-        console.log("All the best");
-      });
-  };
 
   const arrowClosed = (
     <img
@@ -118,119 +106,15 @@ const ArtistList = (props) => {
 
           <div style={{ padding: "0 40px" }}>
             {artist.map(
-              (item, index) =>
-                item.status === false && (
-                  <div
-                    className="artist-page-container"
-                    name={item.full_name}
-                    key={item.Unique_id}
-                  >
-                    <Grid
-                      container
-                      justify="space-between"
-                      direction="row"
-                      onClick={() => handleArtistClick(item.full_name)}
-                    >
-                      <Grid item xs>
-                        <div className="artist-container">
-                          <div className="artist-img-container">
-                            <img
-                              src={item.user.profile_picture}
-                              className="artist-list-img"
-                              alt=""
-                            />
-                          </div>
-                          <div className="artistList-details-container">
-                            <h2 className="artistList-name">
-                              {item.full_name}
-                            </h2>
-                            <p className="artistList-details">
-                              {item.Designs > 1
-                                ? `${item.Designs} designs`
-                                : `${item.Designs} design`}{" "}
-                              |{" "}
-                              {item.followers > 1
-                                ? `${item.followers} followers`
-                                : `${item.followers} follower`}
-                            </p>
-                            {/* <div className="artistList-btn-container"> */}
-                            <Button
-                              variant="contained"
-                              id={item.Unique_id}
-                              onClick={handleFollow}
-                              style={{
-                                width: "120px",
-                                height: "40px",
-                                background: "#1b1918",
-                                padding: "8px 16px",
-                                borderRadius: "8px",
-                                color: "#FFFFFF",
-                              }}
-                            >
-                              <img
-                                id={item.Unique_id}
-                                src={plusIcon}
-                                style={{ width: "24px", height: "24px" }}
-                                alt=""
-                              />
-                              <span
-                                id={item.Unique_id}
-                                style={{
-                                  padding: "0px 10px",
-                                  fontSize: "14px",
-                                  fontWeight: "500",
-                                  color: "#1B1918 !important",
-                                }}
-                              >
-                                Follow
-                              </span>
-                            </Button>
-                            {/* </div> */}
-                          </div>
-                        </div>
-                      </Grid>
-
-                      <Grid item xs>
-                        <div style={{ padding: "0px 10px" }}>
-                          <Grid container spacing={2}>
-                            {item.design_images.map((img) => (
-                              // <ProductCard
-                              //   key={index}
-                              //   id={index}
-                              //   image={`${process.env.REACT_APP_ROOT_URL}/media/${img}`}
-                              //   width={236}
-                              //   height={140}
-                              // />
-                              <img
-                                src={`${process.env.REACT_APP_ROOT_URL}/media/${img}`}
-                                style={{
-                                  width: 236,
-                                  height: 140,
-                                  borderRadius: 12,
-                                  objectFit: "cover",
-                                }}
-                                alt="design img"
-                              />
-                            ))}
-                          </Grid>
-                        </div>
-                      </Grid>
-                    </Grid>
-                    {index < artist.length - 1 ? (
-                      <> </>
-                    ) : (
-                      <div className="load-more-artists-container">
-                        <Button
-                          variant="outlined"
-                          className="load-more-artists-btn"
-                        >
-                          Load more artists
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                )
+              (item, index) => (
+                <Artistitem item={item} handleArtistClick={handleArtistClick} />
+              )
             )}
+          </div>
+          <div className="load-more-artists-container">
+            <Button variant="outlined" className="load-more-artists-btn">
+              Load more artists
+            </Button>
           </div>
           <Footer />
         </div>

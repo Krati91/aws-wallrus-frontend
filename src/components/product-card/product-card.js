@@ -1,12 +1,17 @@
 import React from "react";
 import { Box, Avatar } from "@material-ui/core";
 import "./product-card.scss";
+import { addToFavourite, removeFavourite } from "../../apis/apiCalls";
 
 const ProductCard = (props) => {
   const [like, setLike] = React.useState(false);
 
+  const onFavClick = like ? removeFavourite : addToFavourite;
+
   const likeHandler = () => {
-    setLike(!like);
+    onFavClick(props.sku).then(() => {
+      setLike(!like);
+    }).catch(err => alert("Couldn't add to favourite"));
   };
 
   const heartOutlineColor = like ? "#FA0707" : "#000";

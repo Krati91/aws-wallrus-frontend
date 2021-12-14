@@ -18,6 +18,8 @@ import PropTypes from "prop-types";
 import Applications from "./applications";
 import ButtonFloat from "../../button-float/button-float";
 import axios from "axios";
+import {useDispatch} from "react-redux";
+import { decoProfile } from "../../../initProfile";
 
 const DotMenu = () => (
   <svg
@@ -93,6 +95,7 @@ const ShopContainer = (props) => {
   const [value, setValue] = useState(0);
   const [applications, setApplications] = useState([]);
   const [loader, setLoader] = useState(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     window.localStorage.getItem("Access_Key") ? history.push('/home') : history.push('/');
@@ -103,6 +106,7 @@ const ShopContainer = (props) => {
     };
     init();
     setLoader(false);
+    decoProfile(dispatch);
   }, [history]);
 
   const handleTabChange = (event, newValue) => {

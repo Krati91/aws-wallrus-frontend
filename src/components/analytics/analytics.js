@@ -2,7 +2,6 @@ import './analytics.scss';
 import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis,Tooltip,Legend } from 'recharts';
 import {CircularProgress, Grid} from '@material-ui/core';
 import Earning from '../../images/Earning.svg';
-import Buy from '../../images/Buy.svg';
 import Show from '../../images/Show.svg';
 import Heart from '../../images/Heart.svg';
 import Followers from '../../images/3 User.svg';
@@ -13,9 +12,9 @@ import EarningMob from '../../images/EarningMobile.svg';
 import FollowersMob from '../../images/3 User Mobile.svg';
 import HeartMob from '../../images/HeartMobile.svg';
 import BuyMob from '../../images/BuyMobile.svg';
-import DownMob from '../../images/DownMobile.svg'
 import axios from "axios";
 import {useEffect, useState} from "react";
+import { getAnalytics } from '../../apis/apiCalls';
 
 
 
@@ -30,26 +29,20 @@ const Analytics = (props) => {
 
   useEffect(() => {
     const init = async () => {
-      try {
-        const response = await axios.get("/api/business-analytic");
-        transformAnalytics(response.data);
-        setLoader(false);
-      } catch(err) {
-        console.log(err);
-        alert("Something went wrong");
-      }
+      const response = await getAnalytics();
+      console.log(response);
+      transformAnalytics(response);
+      setLoader(false);
     }
     init();
   }, []);
   
-  console.log(analytics);
-
   const transformAnalytics = (analytics) => {
     const data = [];
     for (let i in analytics["Graph Coordinates"]) {
       data.push({ name: i, sold: analytics["Graph Coordinates"][i]})
     }
-    setAnalytics({purchased:analytics["Purchased"], followers: analytics["No. of followers of the artisti"], coordinates: data});
+    setAnalytics({ earning:analytics["Earning"], sales:analytics["Sales"], favourites:analytics["Favourites"], views:analytics["Views"], followers:analytics["Followers"], coordinates: data});
   }
 
   const {mobile} = props
@@ -106,7 +99,7 @@ const Analytics = (props) => {
                         <span><h5>Earning</h5></span>
                       </div>
                       <div className="price-trend-mobile">
-                        <h1>&#8377;  8.8k </h1>
+                        <h1>&#8377; {analytics.earning}</h1>
                         {/* <img src={DownMob} alt=""></img> */}
                       </div>
                       <p>12% vs last 7 days</p>
@@ -118,7 +111,7 @@ const Analytics = (props) => {
                         <span><h5>Followers</h5></span>
                       </div>
                       <div className="price-trend-mobile">
-                        <h1>  6k </h1>
+                        <h1>{analytics.followers}</h1>
                         {/* <img src={DownMob} alt=""></img> */}
                       </div>
                       <p>12% vs last 7 days</p>
@@ -132,7 +125,7 @@ const Analytics = (props) => {
                         <span><h5>Sales</h5></span>
                       </div>
                       <div className="price-trend-mobile">
-                        <h1>&#8377;  8.8k </h1>
+                        <h1>&#8377;  {analytics.sales} </h1>
                         {/* <img src={DownMob} alt=""></img> */}
                       </div>
                       <p>12% vs last 7 days</p>
@@ -144,7 +137,7 @@ const Analytics = (props) => {
                         <span><h5>Favourites</h5></span>
                       </div>
                       <div className="price-trend-mobile">
-                        <h1>  900 </h1>
+                        <h1>  {analytics.favourites} </h1>
                         {/* <img src={DownMob} alt=""></img> */}
                       </div>
                       <p>12% vs last 7 days</p>
@@ -166,7 +159,7 @@ const Analytics = (props) => {
                                 <h5>Earning</h5>
                             </div>
                             <div className="price-trend">
-                            <h1>&#8377;  8.8k</h1>
+                            <h1>&#8377;  {analytics.earning}</h1>
                             <img src={DownTrend} alt=""></img>
                             </div>
                             <p>12% vs last 7 days</p>
@@ -188,7 +181,7 @@ const Analytics = (props) => {
                                 <h5>Followers</h5>
                             </div>
                             <div className="price-trend">
-                            <h1>&#8377;  240</h1>
+                            <h1>{analytics.followers}</h1>
                             <img src={UpTrend} alt=""></img>
                             </div>
                             <p>12% vs last 7 days</p>
@@ -199,7 +192,7 @@ const Analytics = (props) => {
                                 <h5>Heart</h5>
                             </div>
                             <div className="price-trend">
-                            <h1>&#8377;  240</h1>
+                            <h1>{analytics.favourites}</h1>
                             <img src={UpTrend} alt=""></img>
                             </div>
                             <p>12% vs last 7 days</p>
@@ -210,7 +203,7 @@ const Analytics = (props) => {
                                 <h5>Views</h5>
                             </div>
                             <div className="price-trend">
-                            <h1>&#8377;  240</h1>
+                            <h1>{analytics.views}</h1>
                             <img src={UpTrend} alt=""></img>
                             </div>
                             <p>12% vs last 7 days</p>

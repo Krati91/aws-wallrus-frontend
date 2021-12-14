@@ -865,6 +865,22 @@ export const getDecoratorOrders = async () => {
   return response;
 };
 
+// Follow artist 
+export const followArtist = async (formData) => {
+  let response;
+  await axios.post(`${process.env.REACT_APP_ROOT_URL}/api/follow-artist`, formData)
+  .then(res => response = res.data);
+  return response;
+}
+
+// Unfollow artist
+export const unfollowArtist = async (formData) => {
+  let response;
+  await axios.put(`${process.env.REACT_APP_ROOT_URL}/api/follow-artist`, formData)
+  .then(res => response = res.data);
+  return response;
+}
+
 // Get Decorator's Following List
 export const getDecoratorFollowing = async () => {
   const accessToken = localStorage.getItem("Access_Key"); // TODO: Remove this and put in Axios default config
@@ -928,3 +944,25 @@ export const productReview = async () => {
     .catch((err) => console.log("Error in productReview API", err));
   return response;
 };
+
+// Add product to favorite
+export const addToFavourite = async (id) => {
+  const response = await axios.get(`${process.env.REACT_APP_ROOT_URL}/api/add-to-favourites/${id}`);
+  return response;
+}
+
+// Remove from favourite
+export const removeFavourite = async (id) => {
+  const response = await axios.get(`${process.env.REACT_APP_ROOT_URL}/api/remove-from-favourites/${id}`);
+  return response;
+}
+
+// Get analytics response 
+export const getAnalytics = async () => {
+  let response;
+  await axios.get("/api/business-analytic")
+  .then(res => response = res.data)
+  .catch(() => alert("Couldn't fetch analytics data"));
+
+  return response;
+}

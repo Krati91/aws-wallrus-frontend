@@ -83,13 +83,21 @@ export default function BusinessDetails(props) {
         state: false
     });
 
+    const [isGSTEligible, setIsGSTEligible] = useState(false);
+
+    console.log(error.gst);
+
 
     if (!props.BusinessEditPage) {
-        organization !== '' && pan !== '' && gst !== '' && emailBusiness !== '' && phoneNumberBusiness !== '' && addressStreet !== '' && addressApartment !== '' && cityBusiness !== '' && pincode !== '' && state !== '' && !error.organization && !error.pan && !error.gst && !error.emailBusiness && !error.phoneNumberBusiness && !error.addressStreet && !error.addressApartment && !error.cityBusiness && !error.pincode && !error.state ? props.onChange(true) : props.onChange(false)
+        organization !== '' && pan !== '' && 
+        // gst !== '' &&
+        emailBusiness !== '' && phoneNumberBusiness !== '' && addressStreet !== '' && addressApartment !== '' && cityBusiness !== '' && pincode !== '' && state !== '' && !error.organization && !error.pan && !error.gst && !error.emailBusiness && !error.phoneNumberBusiness && !error.addressStreet && !error.addressApartment && !error.cityBusiness && !error.pincode && !error.state ? props.onChange(true) : props.onChange(false)
     }
 
     if (props.BusinessEditPage) {
-        !error.organization && !error.pan && !error.gst && !error.emailBusiness && !error.phoneNumberBusiness && !error.addressStreet && !error.addressApartment && !error.cityBusiness && !error.pincode && !error.state && organization !== '' && pan !== '' && gst !== '' && emailBusiness !== '' && phoneNumberBusiness !== '' && addressStreet !== '' && addressApartment !== '' && cityBusiness !== '' && pincode !== '' && state !== '' ? props.handleValidity(false) : props.handleValidity(true)
+        !error.organization && !error.pan && !error.gst && !error.emailBusiness && !error.phoneNumberBusiness && !error.addressStreet && !error.addressApartment && !error.cityBusiness && !error.pincode && !error.state && organization !== '' && pan !== '' && 
+        // gst !== '' && 
+        emailBusiness !== '' && phoneNumberBusiness !== '' && addressStreet !== '' && addressApartment !== '' && cityBusiness !== '' && pincode !== '' && state !== '' ? props.handleValidity(false) : props.handleValidity(true)
     }
 
     const regexPan = /[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
@@ -122,6 +130,7 @@ export default function BusinessDetails(props) {
             )
 
         } else if (e.target.id == "business-details-gst-number") {
+          if (!isGSTEligible) {
             (e.target.value === '' || regexGst.test(e.target.value.toUpperCase()) === false) ? (setError({ ...error, gst: true })) : (setError({ ...error, gst: false }))
             dispatch(
                 setGst(
@@ -130,6 +139,7 @@ export default function BusinessDetails(props) {
                     }
                 )
             )
+          }
         } else if (e.target.id == "business-details-email") {
             (e.target.value === '' || regexEmail.test(e.target.value.toLowerCase()) === false) ? (setError({ ...error, emailBusiness: true })) : (setError({ ...error, emailBusiness: false }))
             dispatch(
@@ -197,6 +207,19 @@ export default function BusinessDetails(props) {
         }
     }
 
+    const onGSTEligibleChangeHandler = (e) => {
+      setIsGSTEligible(e.target.checked);
+      if (e.target.checked) {
+        setError({ ...error, gst: false });
+          dispatch(
+            setGst(
+                {
+                    gst: ""
+                }
+            )
+          ) 
+      }
+    }
 
 
     return (
@@ -246,9 +269,10 @@ export default function BusinessDetails(props) {
                                 classes: {
                                     root: classes.label,
                                 }
-                            }} />
+                            }}
+                            disabled={isGSTEligible} />
                             <div className='text-muted-tags'>
-                                <input type="checkbox" id="gst-checkbox" name="GST" />
+                                <input type="checkbox" id="gst-checkbox" name="GST" onChange={onGSTEligibleChangeHandler} />
                                 <label className='text-muted-business-details' for="GST">My business is not yet eligible for GST</label>
                             </div>
 

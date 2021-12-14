@@ -8,6 +8,7 @@ import Logo from "../../images/logo.svg";
 import ChevronLeft from "../../images/chevron-left.svg";
 import axios from "axios";
 import "./otp.scss";
+import { requestOtp } from "../../apis/authApi";
 
 const Otp = (props) => {
   const [counter, setCounter] = useState(60);
@@ -18,16 +19,18 @@ const Otp = (props) => {
   const emailNumber = useSelector(selectEmailNumber);
 
   useEffect(() => {
-    sendOtp().then((res) => {
-      if(res) {
+    sendOtp()
+      .then((res) => {
+        if (res) {
+          setLoader(false);
+          setOtp(res);
+        }
+      })
+      .catch((err) => {
         setLoader(false);
-        setOtp(res);
-      }
-    }).catch((err) => {
-      setLoader(false);
-      alert(`Couldn't send OTP to ${emailNumber}. Try again`);
-      console.log('Error in sending OTP', err);
-    })
+        alert(`Couldn't send OTP to ${emailNumber}. Try again`);
+        console.log("Error in sending OTP", err);
+      });
   }, []);
 
   useEffect(() => {
@@ -41,13 +44,7 @@ const Otp = (props) => {
     formData.append("choice", choice);
     formData.append("value", emailOrNumber);
 
-    let response;
-    await axios.post("/api/verify-email-phone/", formData)
-    .then((res) => {
-      response = res.data;
-    }).catch((err) => console.log('OTP api issue', err));
-
-    return response;
+    return await requestOtp(formData);
   };
 
   const isEmail = () => {
@@ -63,16 +60,18 @@ const Otp = (props) => {
 
   const resendOtp = async () => {
     resetCounter();
-    sendOtp().then((res) => {
-      if(res) {
+    sendOtp()
+      .then((res) => {
+        if (res) {
+          setLoader(false);
+          setOtp(res);
+        }
+      })
+      .catch((err) => {
         setLoader(false);
-        setOtp(res);
-      }
-    }).catch((err) => {
-      setLoader(false);
-      alert(`Couldn't send OTP to ${emailNumber}. Try again`);
-      console.log('Error in re-sending OTP', err);
-    })
+        alert(`Couldn't send OTP to ${emailNumber}. Try again`);
+        console.log("Error in re-sending OTP", err);
+      });
   };
 
   const verifyOtp = () => {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { AuthContext } from '../../apis/AuthContext';
 import "./user-settings.scss";
 import ArrowDown from "../../images/arrow-down.svg";
@@ -17,6 +17,12 @@ import collectionImg from "../../images/Addfile-light.svg";
 import heartImg from "../../images/Heart-light.svg";
 import cartIcon from "../../images/Bag-light.svg";
 import InviteFriendsIcon from "../../images/invite-friends.svg";
+import {
+  getDecoratorSnippet,
+} from "../../apis/apiCalls";
+import { Avatar } from "@material-ui/core";
+import Skeleton from "@material-ui/lab/Skeleton";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -34,6 +40,7 @@ const UserSettings = (props) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const history = useHistory();
+  const userInfo = useSelector(state => state.userDetails);
 
   const handleClick = (event) => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -45,8 +52,8 @@ const UserSettings = (props) => {
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popper" : undefined;
-
-  const LogoutHandler = () => {
+ 
+    const LogoutHandler = () => {
     window.localStorage.clear();
     window.sessionStorage.clear();
     setIsAuth(false);
@@ -70,7 +77,7 @@ const UserSettings = (props) => {
       })
     );
   };
-
+  
   return (
     <React.Fragment>
       <div
@@ -79,7 +86,13 @@ const UserSettings = (props) => {
         type="button"
         onClick={handleClick}
       >
-        <img src={Model} alt="model" className="model" />
+        {
+          userInfo.loader ? (
+            <Skeleton variant="circle" width={50} height={50} />
+          ) : (
+            <img src={`${process.env.REACT_APP_ROOT_URL}${userInfo.profilePic}`} alt="model" className="user-avatar" />
+          )
+        }
         <img src={ArrowDown} alt="arrow-down" className="arrow-down" />
       </div>
       <Popover
@@ -90,8 +103,20 @@ const UserSettings = (props) => {
         className="user-setting-popper"
       >
         <div className={classes.paper}>
-          <img src={Model} alt="model" />
-          <h4 className="user-name">Leslie Alexander</h4>
+          {
+            userInfo.loader ? (
+              <Skeleton variant="circle" width={50} height={50} />
+            ) : (
+              <img src={`${process.env.REACT_APP_ROOT_URL}${userInfo.profilePic}`} alt="model" className="user-avatar" />
+            )
+          }
+          {
+          userInfo.loader ? (
+            <Skeleton width={200} height={30} />
+          ) : (
+            <h4 className="user-name">{`${userInfo.firstName} ${userInfo.lastName}`}</h4>
+          )
+        }
           {userType !== "Artist" && (
             <Link
               to="/userprofile"

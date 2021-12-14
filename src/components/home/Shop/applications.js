@@ -361,6 +361,7 @@ const Applications = (props) => {
                           general={true}
                           key={index}
                           id={item.slug}
+                          sku={item.sku}
                           onClick={viewProduct}
                           designImage={
                             item.productimages_set.length !== 0

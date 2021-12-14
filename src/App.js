@@ -22,7 +22,6 @@ import UploadDesignForm from "./components/home/Forms/Upload-design-form/upload-
 import "./App.scss";
 import MobileDashboard from "./components/dashboard/MobileDashboard";
 import LandingPage from "./components/home/landing-page/landing-page";
-// import HomePage from "./components/home/home";
 import ArtistList from "./components/home/artist/artistList";
 import ViewArtist from "./components/home/artist/viewArtist";
 import HomeDiscover from "./components/home/home-discover/home-discover";

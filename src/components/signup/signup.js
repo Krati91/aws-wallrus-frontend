@@ -1,5 +1,5 @@
 import "./signup.scss";
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
@@ -25,6 +25,8 @@ import { useSelector } from "react-redux";
 import { selectFullName } from "../../redux/Slices/userSignUpSlice/userSignUpSlice";
 import { selectAccountType } from "../../redux/Slices/userSignUpSlice/userSignUpSlice";
 import Otp from "../otp/otp";
+import { resetProfileData } from "./resetEditProfile";
+import { useDispatch } from "react-redux";
 
 const GreenConnector = withStyles({
   alternativeLabel: {
@@ -106,6 +108,12 @@ export default function SignUp() {
   const steps = getSteps();
   let [componentCount, setComponentCount] = useState(0);
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    resetProfileData(dispatch);
+  }, []);
+
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setComponentCount((prevActiveStep) => prevActiveStep + 1);
@@ -127,7 +135,7 @@ export default function SignUp() {
     ) {
       setPhone(true);
       setShowOtp(true);
-    } 
+    }
   };
 
   const renderSignUp = () => {
@@ -137,7 +145,7 @@ export default function SignUp() {
 
   const reverseOtp = () => {
     setShowOtp(false);
-  }
+  };
 
   const switchComponents = (step) => {
     switch (step) {
@@ -155,7 +163,8 @@ export default function SignUp() {
         return <BusinessDetails onChange={handleValidity} />;
       case 4:
         return <BankDetails />;
-      default: <> </>
+      default:
+        <> </>;
     }
   };
 
@@ -251,7 +260,7 @@ export default function SignUp() {
                     onClick={handleBack}
                     className={classes.button}
                   >
-                    <img src={Left} className="leftArrow" alt='' />
+                    <img src={Left} className="leftArrow" alt="" />
                   </Button>
                   {activeStep === 0 ? (
                     <></>

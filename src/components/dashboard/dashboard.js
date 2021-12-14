@@ -44,6 +44,7 @@ import {
 } from '../../redux/Slices/artistSnippetSlice/artistSnippetSlice';
 
 import { setTab } from '../../redux/Slices/userSignUpSlice/userSignUpSlice';
+import { artistProfile } from "../../initProfile";
 
 
 function TabPanel(props) {
@@ -203,6 +204,7 @@ const Dashboard = (props) => {
       history.push('/')
     }
     setIsLoading(true)
+    artistProfile(dispatch);
 
     if (accessToken && refreshToken && firstName === '') {
       ArtistSnippet(accessToken, refreshToken)

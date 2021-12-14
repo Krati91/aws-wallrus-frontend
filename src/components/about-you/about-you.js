@@ -299,13 +299,17 @@ const AboutYou = (props) => {
           :
           (
             <React.Fragment>
-              <InputTextField error={fullname} disabled={props.EditPage ? true : false} value={fullName} helperText={fullname && 'Please enter your fullname'} onChange={handleChange} className="about-you-input" id='about-you-fullName' label="Full name" variant="outlined" fullWidth InputLabelProps={{
+              <InputTextField error={fullname} 
+              // disabled={props.EditPage ? true : false} 
+              value={fullName} helperText={fullname && 'Please enter your fullname'} onChange={handleChange} className="about-you-input" id='about-you-fullName' label="Full name" variant="outlined" fullWidth InputLabelProps={{
                 classes: { root: classes.label }
               }} />
               <InputTextField error={username} value={userName} onChange={handleChange} helperText={username && 'Please enter your username'} className="about-you-input" id='about-you-userName' label="Username" variant="outlined" fullWidth InputLabelProps={{
                 classes: { root: classes.label }
               }} />
-              <InputTextField disabled={props.EditPage ? true : false} type="email" error={Email} helperText={Email && 'Please enter a valid email ID'} value={email} onChange={handleChange} className="about-you-input" id='about-you-email' label="Email" variant="outlined" fullWidth InputLabelProps={{
+              <InputTextField 
+              // disabled={props.EditPage ? true : false} 
+              type="email" error={Email} helperText={Email && 'Please enter a valid email ID'} value={email} onChange={handleChange} className="about-you-input" id='about-you-email' label="Email" variant="outlined" fullWidth InputLabelProps={{
                 classes: {
                   root: classes.label,
                 }

@@ -221,7 +221,7 @@ const CustomButton = (props) => {
         }
     }
     return (
-        <Button onClick={handleSubmit} variant="contained" className={(currentTab === 0 && editProfileValidity) ? 'save-button-disabled' : (currentTab === 1 && changePassValidity) ? 'save-button-disabled' : 'save-button'} disableElevation >
+        <Button onClick={handleSubmit} variant="contained" className={(currentTab === 0 && editProfileValidity) ? 'save-button-disabled' : (currentTab === 1 && changePassValidity) ? 'save-button-disabled' : 'save-button'} disableElevation disabled={(currentTab === 0 && editProfileValidity) ? true : (currentTab === 1 && changePassValidity) ? true : false} >
             {loading ? <CircularProgress size={25} className="button-loader" /> : success ? props.children : props.children}
         </Button>
     )
