@@ -30,6 +30,8 @@ import {
   otherColorways,
   similarDesigns,
   productDetails,
+  addToFavourite,
+  removeFavourite
 } from "../../../../apis/apiCalls";
 import { otherApplications } from "../../../../apis/apiCalls";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -78,11 +80,26 @@ const Product = (props) => {
     ratings: 0,
     reviews_set: [],
   });
+  const [loader, setLoader] = useState(true);
   const history = useHistory();
   const { id } = useParams();
 
+
   const [selectedImage, setSelectedImage] = useState("");
   const [materialTypes, setMaterialTypes] = useState("");
+  const [like, setLike] = React.useState(false);
+
+  const onFavClick = like ? removeFavourite : addToFavourite;
+
+  const likeHandler = () => {
+    onFavClick(productDet.sku).then(() => {
+      setLike((like) => !like);
+    }).catch(err => alert("Couldn't add to favourite"));
+  };
+
+  const heartOutlineColor = like ? "#FA0707" : "#000";
+  const heartFillColor = like ? "#FA0707" : "none";
+  const heartMarkColor = like ? "#fff" : "#000";
   useEffect(() => {
     mainRef.current.scrollIntoView();
     // setProductStatus({
@@ -118,6 +135,11 @@ const Product = (props) => {
       );
       setMaterialTypes([productDetailsList.material]);
       setProductStatus({ ...productStatus, productDet: true });
+      setLoader(false);
+      // Like handling functionality
+      if (productDetailsList.is_favourite) {
+        setLike(true);
+      }
     });
   }, []);
 
@@ -160,42 +182,40 @@ const Product = (props) => {
   const defaultUnit = unit[0];
   const [currentUnit, setCurrentUnit] = useState(defaultUnit);
 
-  const HeartIcon = (props) => {
-    return (
-      <svg
-        width={props.width}
-        className={props.className}
-        height={props.height}
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <g id="Iconly/Light/Heart">
-          <g id="Heart">
-            <path
-              id="Stroke 1"
-              fill-rule="evenodd"
-              clip-rule="evenodd"
-              d="M2.87187 11.5983C1.79887 8.24832 3.05287 4.41932 6.56987 3.28632C8.41987 2.68932 10.4619 3.04132 11.9999 4.19832C13.4549 3.07332 15.5719 2.69332 17.4199 3.28632C20.9369 4.41932 22.1989 8.24832 21.1269 11.5983C19.4569 16.9083 11.9999 20.9983 11.9999 20.9983C11.9999 20.9983 4.59787 16.9703 2.87187 11.5983Z"
-              stroke="#1B1918"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              id="Stroke 3"
-              d="M16 6.69995C17.07 7.04595 17.826 8.00095 17.917 9.12195"
-              stroke="#1B1918"
-              stroke-width="1.5"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </g>
-        </g>
-      </svg>
-    );
-  };
+  const HeartIcon = (
+    <svg
+      onClick={likeHandler}
+      width="22"
+      height="20"
+      viewBox="0 0 22 20"
+      fill={heartFillColor}
+      xmlns="http://www.w3.org/2000/svg"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        marginLeft: 10,
+        cursor: "pointer"
+      }}
+    >
+      <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M1.87187 9.59832C0.798865 6.24832 2.05287 2.41932 5.56987 1.28632C7.41987 0.689322 9.46187 1.04132 10.9999 2.19832C12.4549 1.07332 14.5719 0.693322 16.4199 1.28632C19.9369 2.41932 21.1989 6.24832 20.1269 9.59832C18.4569 14.9083 10.9999 18.9983 10.9999 18.9983C10.9999 18.9983 3.59787 14.9703 1.87187 9.59832Z"
+        stroke={heartOutlineColor}
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M15 4.69995C16.07 5.04595 16.826 6.00095 16.917 7.12195"
+        stroke={heartMarkColor}
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
 
-  const [liked, setLiked] = useState(false);
   const [checked, setChecked] = React.useState(false);
   const [quantity, setQuantity] = React.useState(1);
 
@@ -213,10 +233,6 @@ const Product = (props) => {
 
   const viewProductImage = () => {
     setChecked((prev) => !prev);
-  };
-
-  const like = () => {
-    setLiked((prev) => !prev);
   };
 
   const handleMaterialType = (materialType) => {
@@ -287,7 +303,7 @@ const Product = (props) => {
       </div>
       {
         // (productStatus.simDesign === false || productStatus.otherColor === false) && (productStatus.otherApp === false ||
-        productStatus.productDet === false ? (
+        loader ? (
           <div className="product-loader-container">
             <div>
               <CircularProgress size={80} className="product-loader" />
@@ -312,7 +328,7 @@ const Product = (props) => {
                                   <img
                                     onClick={changeImage}
                                     id={index}
-                                    src={`${process.env.REACT_APP_ROOT_URL}${current.image}`}
+                                    src={`${process.env.REACT_APP_ROOT_URL}${current.images}`}
                                     alt="product"
                                     className="product-images"
                                   />
@@ -392,12 +408,8 @@ const Product = (props) => {
                           alt="collection"
                           className="collection"
                         />
-                        <div onClick={like}>
-                          <HeartIcon
-                            width={23}
-                            height={24}
-                            className={liked ? "heartImg-active" : "heartImg"}
-                          />
+                        <div>
+                          {HeartIcon}
                         </div>
                       </div>
                     </div>

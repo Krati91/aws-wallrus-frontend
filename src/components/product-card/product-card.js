@@ -2,16 +2,28 @@ import React from "react";
 import { Box, Avatar } from "@material-ui/core";
 import "./product-card.scss";
 import { addToFavourite, removeFavourite } from "../../apis/apiCalls";
+import { useEffect } from "react";
 
 const ProductCard = (props) => {
   const [like, setLike] = React.useState(false);
 
   const onFavClick = like ? removeFavourite : addToFavourite;
 
+  useEffect(() => {
+    if (props.isFavourite) {
+      setLike(true);
+    }
+  }, []);
+
   const likeHandler = () => {
     onFavClick(props.sku).then(() => {
+      if (like) {
+        if (props.shouldRemoveFavourite) {
+          props.removeFavourite();
+        }
+      }
       setLike(!like);
-    }).catch(err => alert("Couldn't add to favourite"));
+    }).catch(err => console.log(err));
   };
 
   const heartOutlineColor = like ? "#FA0707" : "#000";
@@ -81,8 +93,6 @@ const ProductCard = (props) => {
     </svg>
   );
 
-  console.log(props.designImage);
-
   return (
     <Box gap={1} className="prod-card">
       <img
@@ -124,6 +134,7 @@ const ProductCard = (props) => {
       </Box>
     </Box>
   );
+
 };
 
 export default ProductCard;

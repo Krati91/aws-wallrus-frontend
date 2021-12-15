@@ -16,7 +16,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import PropTypes from "prop-types";
 import userImg from "../../../images/model.svg";
 import Edit from "../../../images/Edit.svg";
-import ProductCard from "../product-cards";
+import ProductCard from "../../product-card/product-card";
 import UserFollowing from "./user-profile-tabs-components/user-following/user-followings";
 import UserOrders from "./user-profile-tabs-components/user-orders/user-orders";
 import UserAnalytics from "./user-profile-tabs-components/user-analytics/user-analytics";
@@ -148,7 +148,6 @@ const UserProfile = (props) => {
   useEffect(() => {
     getDecoratorSnippet()
       .then((res) => {
-        console.log(res);
         setuserDetails({
           first_name: res.first_name,
           last_name: res.last_name,
@@ -164,7 +163,8 @@ const UserProfile = (props) => {
           const design = {
             name: value.artist,
             image: value.image,
-            artist_image: value.artist_image
+            artist_image: value.artist_image,
+            sku: value.sku
           };
           list.push(design);
         });
@@ -173,6 +173,12 @@ const UserProfile = (props) => {
       })
       .catch((err) => alert("Couldn't fetch your favorite designs"));
   }, []);
+
+  const removeFavourite = (id) => {
+    const favDesigns = [...designContents];
+    const newFavDesigns = favDesigns.filter(design => design.sku !== id);
+    setdesignContents(newFavDesigns);
+  }
 
   return (
     <div className="user-profile-page-container">
@@ -250,7 +256,7 @@ const UserProfile = (props) => {
 
           <Grid item xs>
             <TabPanel value={value} index={0}>
-              <Grid container style={{ padding: "40px", minHeight: "250px" }}>
+              <Grid container style={{ padding: "40px", minHeight: "250px" }} spacing={6}>
                 {loader ? (
                   <div
                     style={{
@@ -276,16 +282,21 @@ const UserProfile = (props) => {
                   </div>
                 ) : (
                       designContents.map((item, index) => (
-                        <>
+                  
+                        <Grid item xs={6} md={4} lg={3} xl={3}>
                           <ProductCard
-                            key={index}
-                            id={index}
-                            image={item.image}
-                            userimg={item.artist_image}
-                            artistname={item.name}
-                            generaldata
+                            key={item.sku}
+                            id={item.sku}
+                            sku={item.sku}
+                            designImage={`${process.env.REACT_APP_ROOT_URL}${item.image}`}
+                            designerImage={`${process.env.REACT_APP_ROOT_URL}${item.artist_image}`}
+                            designerName={item.name}
+                            isFavourite={true}
+                            shouldRemoveFavourite
+                            removeFavourite={() => removeFavourite(item.sku)}
+                            general
                           />
-                        </>
+                        </Grid>
                       ))
                     )}
               </Grid>

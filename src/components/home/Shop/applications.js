@@ -359,15 +359,13 @@ const Applications = (props) => {
                       <Grid item xs={6} md={4} lg={3} xl={3} style={{ maxWidth: '322px' }}>
                         <ProductCard
                           general={true}
-                          key={index}
+                          key={item.slug}
                           id={item.slug}
                           sku={item.sku}
                           onClick={viewProduct}
-                          designImage={
-                            item.productimages_set.length !== 0
-                              ? `${process.env.REACT_APP_ROOT_URL}${item.productimages_set[0].image}`
-                              : design1
-                          }
+                          isFavourite={item.is_favourite}
+                          designImage={`${process.env.REACT_APP_ROOT_URL}${item.productimage}`}
+                          designerImage={`${process.env.REACT_APP_ROOT_URL}${item.artist_image}`}
                           designerName={item.artist}
                         />
                       </Grid>

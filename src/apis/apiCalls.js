@@ -947,14 +947,22 @@ export const productReview = async () => {
 
 // Add product to favorite
 export const addToFavourite = async (id) => {
-  const response = await axios.get(`${process.env.REACT_APP_ROOT_URL}/api/add-to-favourites/${id}`);
-  return response;
+  try {
+    const response = await axios.get(`${process.env.REACT_APP_ROOT_URL}/api/add-to-favourites/${id}`);
+    return response;
+  } catch (err) {
+    alert(`Couldn't add to favourite`)
+  }
 }
 
 // Remove from favourite
 export const removeFavourite = async (id) => {
-  const response = await axios.get(`${process.env.REACT_APP_ROOT_URL}/api/remove-from-favourites/${id}`);
-  return response;
+  try {
+    const response = await axios.get(`${process.env.REACT_APP_ROOT_URL}/api/remove-from-favourites/${id}`);
+    return response;
+  } catch (err) {
+    alert(`Couldn't remove from favourite`)
+  }
 }
 
 // Get analytics response 

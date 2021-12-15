@@ -9,7 +9,7 @@ const Artistitem = (props) => {
   const [isFollowed, setIsFollowed] = useState(false);
   const [followers, setFollowers] = useState();
 
-  const { item, handleArtistClick } = props;
+  const { item, handleArtistClick, removeFollower, shouldRemoveFollower } = props;
 
   useEffect(() => {
     setFollowers(item.followers);
@@ -42,15 +42,22 @@ const Artistitem = (props) => {
 
     unfollowArtist(formData)
       .then((data) => {
-        setIsFollowed(false);
-        setFollowLoader(false);
+        if (shouldRemoveFollower) {
+          removeFollower(item.Unique_id);
+        } else {
+          setIsFollowed(false);
+        }
         setFollowers(followers - 1);
+        setFollowLoader(false);
+
       })
       .catch((messed) => {
         alert("Couldn't unfollow that artist!");
         setFollowLoader(false);
       });
   };
+
+  console.log(item);
 
   return (
     <div
@@ -150,7 +157,7 @@ const Artistitem = (props) => {
             <Grid container spacing={2}>
               {item.design_images.map((img) => (
                 <img
-                  src={`${process.env.REACT_APP_ROOT_URL}/media/${img}`}
+                  src={`${process.env.REACT_APP_ROOT_URL}${img}`}
                   style={{
                     width: 236,
                     height: 140,

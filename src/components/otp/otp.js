@@ -6,7 +6,6 @@ import { selectEmailNumber } from "../../redux/Slices/userSignUpSlice/userSignUp
 import Input from "../input/input";
 import Logo from "../../images/logo.svg";
 import ChevronLeft from "../../images/chevron-left.svg";
-import axios from "axios";
 import "./otp.scss";
 import { requestOtp } from "../../apis/authApi";
 
