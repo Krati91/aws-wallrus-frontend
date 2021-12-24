@@ -1,14 +1,16 @@
 import React from "react";
 import TextField from "@material-ui/core/TextField";
-import "./input.css";
+import "./input.scss";
 
 const Input = (props) => {
   return (
     <TextField
+      id={props.id}
       helperText={props.helperText}
       error={props.error}
+      rows={props.rows}
+      multiline={props.multiline}
       onChange={(event) => props.onChange(event)}
-      id="outlined-basic"
       label={props.placeholder}
       variant="outlined"
       className={`width-100 primary-input ${props.className}`}

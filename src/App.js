@@ -37,6 +37,7 @@ import RequestForm from "./components/home/Forms/Request-Management-Form/request
 import AboutUs from "./components/home/landing-page/about-us/about-us";
 import DesignToSell from "./components/home/landing-page/design-to-sell/design-to-sell";
 import ForgotPassword from "./components/forgot-password/forgot-password";
+import CollectionModel from "./components/collection-model/collection-model";
 
 function App() {
   const [isAuth, setIsAuth] = useState(false);
@@ -56,12 +57,11 @@ function App() {
   axios.defaults.baseURL = `${process.env.REACT_APP_ROOT_URL}`;
 
   if (isAuth) {
-    const token = window.localStorage.getItem("Access_Key");
-    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     routes = (
       <>
         <Route exact path="/home">
           <Shop />
+          {/* <CollectionModel /> */}
         </Route>
         <Route exact path="/shop">
           <Shop />

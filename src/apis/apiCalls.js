@@ -567,9 +567,14 @@ export async function filterList(application) {
 
 // product list api
 export async function productList(application) {
+  const accessToken = localStorage.getItem("Access_Key");
   let productListValue = [];
   await axios
-    .get(`${process.env.REACT_APP_ROOT_URL}/api/product-list/${application}`)
+    .get(`${process.env.REACT_APP_ROOT_URL}/api/product-list/${application}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
     .then((res) => {
       if (res) {
         productListValue = res.data;
@@ -584,10 +589,15 @@ export async function productList(application) {
 
 // product details api
 export async function productDetails(slugName) {
+  const accessToken = localStorage.getItem("Access_Key");
   let productDetailsValue;
 
   await axios
-    .get(`${process.env.REACT_APP_ROOT_URL}/api/product-detail/${slugName}`)
+    .get(`${process.env.REACT_APP_ROOT_URL}/api/product-detail/${slugName}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
     .then((res) => {
       productDetailsValue = res.data;
     })
@@ -600,10 +610,15 @@ export async function productDetails(slugName) {
 // other colorways api
 export async function otherColorways(otherColorway) {
   let otherColorwaysValue;
+  const accessToken = localStorage.getItem("Access_Key");
 
   await axios
     .get(
-      `${process.env.REACT_APP_ROOT_URL}/api/other-colorways/${otherColorway}`
+      `${process.env.REACT_APP_ROOT_URL}/api/other-colorways/${otherColorway}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
     )
     .then((data) => {
       otherColorwaysValue = data;
@@ -618,10 +633,15 @@ export async function otherColorways(otherColorway) {
 // other applications api
 export async function otherApplications(otherApplication) {
   let otherApplicationsValue;
+  const accessToken = localStorage.getItem("Access_Key");
 
   await axios
     .get(
-      `${process.env.REACT_APP_ROOT_URL}/api/other-applications/${otherApplication}`
+      `${process.env.REACT_APP_ROOT_URL}/api/other-applications/${otherApplication}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
     )
     .then((data) => {
       otherApplicationsValue = data;
@@ -636,10 +656,15 @@ export async function otherApplications(otherApplication) {
 // similar designs api
 export async function similarDesigns(similarDesign) {
   let similarDesignsValue;
+  const accessToken = localStorage.getItem("Access_Key");
 
   await axios
     .get(
-      `${process.env.REACT_APP_ROOT_URL}/api/similar-designs/${similarDesign}`
+      `${process.env.REACT_APP_ROOT_URL}/api/similar-designs/${similarDesign}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
     )
     .then((data) => {
       similarDesignsValue = data;
@@ -735,12 +760,12 @@ export async function ArtistListStatusPost(
   await axios
     .post(
       `${process.env.REACT_APP_ROOT_URL}/api/artist-list-status/`,
-      followStatus
-      // {
-      //   headers: {
-      //     Authorization: `Bearer ${accessToken}`,
-      //   },
-      // }
+      followStatus,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
     )
     .then((response) => response)
     .then((res) => {
@@ -867,16 +892,26 @@ export const getDecoratorOrders = async () => {
 
 // Follow artist 
 export const followArtist = async (formData) => {
+  const accessToken = localStorage.getItem("Access_Key");
   let response;
-  await axios.post(`${process.env.REACT_APP_ROOT_URL}/api/follow-artist`, formData)
+  await axios.post(`${process.env.REACT_APP_ROOT_URL}/api/follow-artist`, formData, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
   .then(res => response = res.data);
   return response;
 }
 
 // Unfollow artist
 export const unfollowArtist = async (formData) => {
+  const accessToken = localStorage.getItem("Access_Key");
   let response;
-  await axios.put(`${process.env.REACT_APP_ROOT_URL}/api/follow-artist`, formData)
+  await axios.put(`${process.env.REACT_APP_ROOT_URL}/api/follow-artist`, formData, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
   .then(res => response = res.data);
   return response;
 }
@@ -947,8 +982,13 @@ export const productReview = async () => {
 
 // Add product to favorite
 export const addToFavourite = async (id) => {
+  const accessToken = localStorage.getItem("Access_Key");
   try {
-    const response = await axios.get(`${process.env.REACT_APP_ROOT_URL}/api/add-to-favourites/${id}`);
+    const response = await axios.get(`${process.env.REACT_APP_ROOT_URL}/api/add-to-favourites/${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     return response;
   } catch (err) {
     alert(`Couldn't add to favourite`)
@@ -957,8 +997,13 @@ export const addToFavourite = async (id) => {
 
 // Remove from favourite
 export const removeFavourite = async (id) => {
+  const accessToken = localStorage.getItem("Access_Key");
   try {
-    const response = await axios.get(`${process.env.REACT_APP_ROOT_URL}/api/remove-from-favourites/${id}`);
+    const response = await axios.get(`${process.env.REACT_APP_ROOT_URL}/api/remove-from-favourites/${id}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     return response;
   } catch (err) {
     alert(`Couldn't remove from favourite`)
@@ -967,10 +1012,123 @@ export const removeFavourite = async (id) => {
 
 // Get analytics response 
 export const getAnalytics = async () => {
+  const accessToken = localStorage.getItem("Access_Key");
   let response;
-  await axios.get("/api/business-analytic")
+  await axios.get("/api/business-analytic", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
   .then(res => response = res.data)
   .catch(() => alert("Couldn't fetch analytics data"));
 
   return response;
+}
+
+// Get Artist Details
+export const getArtistDetails = async(artistId) => {
+  const accessToken = localStorage.getItem("Access_Key");
+
+  try {
+    const response = await axios.get(`/api/artist-details/${artistId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    alert("Couldn't fetch Artist Details");
+  }
+}
+
+export const getArtistDesignList = async (artistId) => {
+  const accessToken = localStorage.getItem("Access_Key");
+
+  try {
+    const response = await axios.get(`/api/artist-design-list/${artistId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    alert ("Couldn't fetch Artist Design List");
+  }
+}
+
+export const getUnderReviews = async() => {
+  const accessToken = localStorage.getItem("Access_Key");
+  
+  try {
+    const response = await axios.get(`/api/under-review`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return response.data;
+  } catch (err) {
+    alert("Couldn't fetch under reviews")
+  }
+}
+
+
+export const addProductToCollection = async(formData) => {
+  const accessToken = localStorage.getItem("Access_Key");
+  
+  try {
+    await axios.patch(`/api/decorator-collections`,formData, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    alert("Product add to collection successfully")
+  } catch (err) {
+    alert("Couldn't add to collection")
+  }
+}
+
+export const addProductToNewCollection = async(formData) => {
+  const accessToken = localStorage.getItem("Access_Key");
+  
+  try {
+    await axios.post(`/api/decorator-collections`,formData, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    alert("Collection created and add product successfully")
+  } catch (err) {
+    alert("Couldn't create new collection")
+  }
+}
+
+export const updateCollection = async(formData) => {
+  const accessToken = localStorage.getItem("Access_Key");
+  
+  try {
+    await axios.put(`/api/decorator-collections`,formData, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    alert("Collection updated successfully")
+  } catch (err) {
+    alert("Couldn't update that collection")
+  }
+}
+
+export const deleteCollection = async(formData) => {
+  const accessToken = localStorage.getItem("Access_Key");
+  
+  try {
+    await axios.delete(`/api/decorator-collections`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      data: formData
+    });
+    alert("Collection delete successfully")
+  } catch (err) {
+    alert("Couldn't update that collection")
+  }
 }

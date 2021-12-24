@@ -3,9 +3,11 @@ import { Box, Avatar } from "@material-ui/core";
 import "./product-card.scss";
 import { addToFavourite, removeFavourite } from "../../apis/apiCalls";
 import { useEffect } from "react";
+import CollectionModel from "../collection-model/collection-model";
 
 const ProductCard = (props) => {
   const [like, setLike] = React.useState(false);
+  const [showCollectionModel, setShowCollectionMode] = React.useState(false);
 
   const onFavClick = like ? removeFavourite : addToFavourite;
 
@@ -16,14 +18,21 @@ const ProductCard = (props) => {
   }, []);
 
   const likeHandler = () => {
-    onFavClick(props.sku).then(() => {
-      if (like) {
-        if (props.shouldRemoveFavourite) {
-          props.removeFavourite();
+    onFavClick(props.sku)
+      .then(() => {
+        if (like) {
+          if (props.shouldRemoveFavourite) {
+            props.removeFavourite();
+          }
         }
-      }
-      setLike(!like);
-    }).catch(err => console.log(err));
+        setLike(!like);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  // Toggle model handler
+  const toggleModel = (boolean) => {
+    setShowCollectionMode(boolean);
   };
 
   const heartOutlineColor = like ? "#FA0707" : "#000";
@@ -32,6 +41,7 @@ const ProductCard = (props) => {
 
   const collectionIcon = (
     <svg
+      onClick={() => toggleModel(true)}
       width={props.width}
       height={props.height}
       className={props.className}
@@ -94,47 +104,59 @@ const ProductCard = (props) => {
   );
 
   return (
-    <Box gap={1} className="prod-card">
-      <img
-        onClick={props.onClick}
-        className="prod-card--image"
-        src={props.designImage}
-        alt="img"
-        id={props.id}
-      />
-      <Box style={{ display: "flex", alignItems: "center" }} gridGap={10}>
-        {props.general && (
-          <>
-            {!props.designerImage ? (
-              <Avatar />
-            ) : (
-              <Avatar>
-                <img src={props.designerImage} alt="img" />
-              </Avatar>
-            )}
-            <p
-              className="x-bold prod-card--designer-name"
-              style={{ marginRight: "auto" }}
-            >
-              {props.designerName}
-            </p>
-          </>
-        )}
-        <Box
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(2, auto)",
-            gap: 10,
-            marginLeft: "auto",
-          }}
-        >
-          {collectionIcon}
-          {heartIcon}
+    <>
+      {showCollectionModel && (
+        <CollectionModel product_pk={props.sku}
+          show={showCollectionModel}
+          toggleModel={(bool) => toggleModel(bool)}
+        />
+      )}
+      <Box gap={1} className="prod-card">
+        <img
+          onClick={props.onClick}
+          className="prod-card--image"
+          src={props.designImage}
+          alt="img"
+          id={props.id}
+        />
+        <Box style={{ display: "flex", alignItems: "center" }} gridGap={10}>
+          {props.general && (
+            <>
+              {!props.designerImage ? (
+                <Avatar />
+              ) : (
+                <img
+                  className="prod-card--avatar"
+                  src={props.designerImage}
+                  alt="img"
+                />
+              )}
+              <p
+                className="x-bold prod-card--designer-name"
+                style={{ marginRight: "auto" }}
+              >
+                {props.designerName}
+              </p>
+            </>
+          )}
+          <Box
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, auto)",
+              gap: 10,
+              marginLeft: "auto",
+            }}
+          >
+            {
+              props.hideCollection 
+            }
+            {collectionIcon}
+            {heartIcon}
+          </Box>
         </Box>
       </Box>
-    </Box>
+    </>
   );
-
 };
 
 export default ProductCard;

@@ -382,8 +382,11 @@ const Editprofile = (props) => {
   const [editProfileLoading, setEditProfileLoading] = useState(false);
 
   useEffect(() => {
+    console.log("edit profile");
     if (accessToken && refreshToken) {
-      if (value === 0 && userName === "") {
+      // if (value === 0 && userName === "") {
+      if (value === 0) {
+        console.log("edit profile if")
         setEditProfileLoading(true);
         // GetEdit(accessToken, refreshToken)
         //   .then((artist_data) => {

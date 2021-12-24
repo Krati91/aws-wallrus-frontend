@@ -1,96 +1,31 @@
 import { useEffect, useState } from "react"
 import "./user-following.scss"
-import { Grid, Button } from "@material-ui/core"
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { Button } from "@material-ui/core";
 import { getDecoratorFollowing } from '../../../../../apis/apiCalls';
-import ProductCard from "../../../product-cards"
-import design1 from "../../../../../images/design1.svg"
-import design2 from "../../../../../images/design2.svg"
-import design3 from "../../../../../images/design3.svg"
 import Artistitem from "../../../artist/artistItem";
-// import userimg1 from "../../../../../images/Ellipse68.svg"
-// import userimg2 from "../../../../../images/Ellipse69.svg"
-// import userimg3 from "../../../../../images/Ellipse70.svg"
-// import userimg4 from "../../../../../images/Ellipse71.svg"
+import { useHistory } from "react-router";
 
 const UserFollowing = (props) => {
 
+  const paginationCount = 10;
   const [loader, setloader] = useState(true);
   const [followingArtists, setfollowingArtists] = useState([])
-
-  // const followingArtists = [
-  //   {
-  //     name: "Jacob Jones",
-  //     artistimg: userimg1,
-  //     data: [design1, design2, design3],
-  //   },
-  //   {
-  //     name: "Jane Cooper",
-  //     artistimg: userimg2,
-  //     data: [design2, design3, design1],
-  //   },
-  //   {
-  //     name: "Darlene Robertson",
-  //     artistimg: userimg3,
-  //     data: [design1, design2, design3],
-  //   },
-  //   {
-  //     name: "Marvin McKinney",
-  //     artistimg: userimg4,
-  //     data: [design1, design2, design3],
-  //   },
-  //   {
-  //     name: "Jacob Jones",
-  //     artistimg: userimg1,
-  //     data: [design1, design2, design3],
-  //   },
-  //   {
-  //     name: "Jane Cooper",
-  //     artistimg: userimg2,
-  //     data: [design1, design2, design3],
-  //   },
-  //   {
-  //     name: "Darlene Robertson",
-  //     artistimg: userimg3,
-  //     data: [design1, design2, design3],
-  //   },
-  //   {
-  //     name: "Marvin McKinney",
-  //     artistimg: userimg4,
-  //     data: [design1, design2, design3],
-  //   },
-  //   {
-  //     name: "Jane Cooper",
-  //     artistimg: userimg2,
-  //     data: [design1, design2, design3],
-  //   },
-
-  // ]
-
+  const history = useHistory();
+  const [slice, setSlice] = useState(paginationCount);
 
   useEffect(() => {
     getDecoratorFollowing()
       .then((res) => {
-        // let list = [];
-        // res.forEach((value) => {
-        //   if (value.status) {
-        //     const followingList = {
-        //       Unique_id: value.Unique_id,
-        //       name: value.full_name,
-        //       artistimg: value.user.profile_picture,
-        //       followers: value.followers,
-        //       Designs: value.Designs,
-        //       design_images: value.design_images,
-        //     }
-        //     list.push(followingList);
-        //   }
-        // })
-
         const list = res.filter((value) => value.status);
         setloader(false);
         setfollowingArtists(list);
       })
   }, []);
+
+  const handleArtistClick = (artist) => {
+    history.push(`/artist/${artist}`);
+  };
 
   const removeFollower = (id) => {
     const list = [...followingArtists];
@@ -98,7 +33,9 @@ const UserFollowing = (props) => {
     setfollowingArtists(newList);
   }
 
-  console.log(followingArtists);
+  const sliceHandler = () => {
+    setSlice(prev => prev + paginationCount);
+  }
 
   return (
     <div className="following-page-container">
@@ -115,77 +52,24 @@ const UserFollowing = (props) => {
                   No data to show
                 </div>
               ) : (
-                followingArtists.map((item, index) =>
+                followingArtists.slice(0, slice).map((item, index) =>
                 (
-                  // <>
-                  //   <Grid container justify="space-between" direction="row" key={item.Unique_id}>
-                  //     <Grid item xs>
-                  //       <div className="following-artist-container">
-                  //         <div className="following-artist-img-container">
-                  //           <img src={item.artistimg} className="following-artist-img" alt='' />
-                  //         </div>
-
-                  //         <div className="following-artist-details-container">
-                  //           <h2 className="following-artist-name">
-                  //             {
-                  //               item.name
-                  //             }
-                  //           </h2>
-                  //           <p className="following-artist-details">
-                  //             {item.Designs > 1 ? `${item.Designs} designs` : `${item.Designs} design`} &nbsp;|&nbsp; {item.followers > 1 ? `${item.followers} followers` : `${item.followers} follower`}
-                  //           </p>
-                  //           <div className="following-artist-btn-container">
-                  //             <Button variant="outlined" className="following-artist-btn">
-                  //               <span style={{ padding: "0px 10px", fontSize: "14px", fontWeight: "500", color: "#1B1918 !important" }}>Following</span>
-                  //             </Button>
-                  //           </div>
-                  //         </div>
-
-                  //       </div>
-                  //     </Grid>
-
-                  //     <Grid item xs>
-                  //       {
-                  //         <div style={{ padding: "0px 20px" }}>
-                  //           <Grid container spacing={2}>
-                  //             {
-                  //               item.design_images.map((item, index) => (
-                  //                 <ProductCard
-                  //                   key={index}
-                  //                   id={index}
-                  //                   image={item}
-                  //                   width={236}
-                  //                   height={140}
-                  //                   followingartistdata
-                  //                 />
-                  //               ))
-                  //             }
-                  //           </Grid>
-
-                  //         </div>
-                  //       }
-                  //     </Grid>
-
-
-
-                  //   </Grid>
-                  //   {
-                  //     index < (followingArtists.length - 1) ? (
-                  //       <div className="horizontal-break-container">
-                  //         <div>
-                  //           <hr className="horizontal-break" />
-                  //         </div>
-                  //       </div>
-                  //     )
-                  //       : (
-                  //         <div style={{ marginBottom: "80px" }}></div>
-                  //       )
-                  //   }
-                  // </>
-                  <Artistitem item={item} shouldRemoveFollower removeFollower={(id) => removeFollower(id)} />
+                  <Artistitem item={item} 
+                  handleArtistClick={handleArtistClick}
+                  shouldRemoveFollower
+                  removeFollower={id => removeFollower(id)} />
                 ))
               )
           )
+      }
+      {
+        slice < followingArtists.length && (
+          <div className="load-more-artists-container">
+            <Button variant="outlined" className="load-more-artists-btn" onClick={sliceHandler}>
+              Load more artists
+            </Button>
+          </div>
+        )
       }
     </div>
   )

@@ -16,6 +16,8 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import PropTypes from "prop-types";
 import userImg from "../../../images/model.svg";
 import Edit from "../../../images/Edit.svg";
+import design from "../../../images/design1.svg";
+import {useHistory} from "react-router-dom";
 import ProductCard from "../../product-card/product-card";
 import UserFollowing from "./user-profile-tabs-components/user-following/user-followings";
 import UserOrders from "./user-profile-tabs-components/user-orders/user-orders";
@@ -28,6 +30,8 @@ import {
   getDecoratorSnippet,
   getDecoratorFavourites,
 } from "../../../apis/apiCalls";
+import { setTab } from "../../../redux/Slices/userSignUpSlice/userSignUpSlice";
+import { useDispatch } from "react-redux";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -88,62 +92,72 @@ const UserProfile = (props) => {
     profile_picture: undefined,
   });
   const [designContents, setdesignContents] = useState([]);
+  const dispatch = useDispatch();
+  const history = useHistory();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  // const designContents = [
-  //   {
-  //     designName: "Art Decon1",
-  //     applications: "Wallpaper",
-  //     name: "Jassie Mario",
-  //     image: design1
-  //   },
-  //   {
-  //     designName: "Art Decon2",
-  //     applications: "Curtains",
-  //     name: "Ronald Richards",
-  //     image: design2
-  //   },
-  //   {
-  //     designName: "Art Decon3",
-  //     applications: "Table cloth",
-  //     name: "Leslie Alexander",
-  //     image: design3
-  //   },
-  //   {
-  //     designName: "Art Decon4",
-  //     applications: "Curtain blinds",
-  //     name: "Savannah Nguyen",
-  //     image: design4
-  //   },
-  //   {
-  //     designName: "Art Decon2",
-  //     applications: "Curtains",
-  //     name: "Ronald Richards",
-  //     image: design2
-  //   },
-  //   {
-  //     designName: "Art Decon3",
-  //     applications: "Table cloth",
-  //     name: "Leslie Alexander",
-  //     image: design3
-  //   },
+  const handleTab = () => {
+    dispatch(
+      setTab({
+        tab: 0,
+      })
+    );
+  }
 
-  //   {
-  //     designName: "Art Decon1",
-  //     applications: "Wallpaper",
-  //     name: "Jassie Mario",
-  //     image: design1
-  //   },
-  //   {
-  //     designName: "Art Decon4",
-  //     applications: "Curtain blinds",
-  //     name: "Savannah Nguyen",
-  //     image: design4
-  //   },
-  // ]
+  const sample = [
+    {
+      designName: "Art Decon1",
+      applications: "Wallpaper",
+      name: "Jassie Mario",
+      image: design
+    },
+    {
+      designName: "Art Decon2",
+      applications: "Curtains",
+      name: "Ronald Richards",
+      image: design
+    },
+    {
+      designName: "Art Decon3",
+      applications: "Table cloth",
+      name: "Leslie Alexander",
+      image: design
+    },
+    {
+      designName: "Art Decon4",
+      applications: "Curtain blinds",
+      name: "Savannah Nguyen",
+      image: design
+    },
+    {
+      designName: "Art Decon2",
+      applications: "Curtains",
+      name: "Ronald Richards",
+      image: design
+    },
+    {
+      designName: "Art Decon3",
+      applications: "Table cloth",
+      name: "Leslie Alexander",
+      image: design
+    },
+
+    {
+      designName: "Art Decon1",
+      applications: "Wallpaper",
+      name: "Jassie Mario",
+      image: design
+    },
+    {
+      designName: "Art Decon4",
+      applications: "Curtain blinds",
+      name: "Savannah Nguyen",
+      image: design
+    },
+  ]
 
   useEffect(() => {
     getDecoratorSnippet()
@@ -164,7 +178,8 @@ const UserProfile = (props) => {
             name: value.artist,
             image: value.image,
             artist_image: value.artist_image,
-            sku: value.sku
+            sku: value.sku,
+            slug: value.slug
           };
           list.push(design);
         });
@@ -178,6 +193,10 @@ const UserProfile = (props) => {
     const favDesigns = [...designContents];
     const newFavDesigns = favDesigns.filter(design => design.sku !== id);
     setdesignContents(newFavDesigns);
+  }
+
+  const handleClick = (slug) => {
+    history.push(`shop/${slug}`);
   }
 
   return (
@@ -221,6 +240,7 @@ const UserProfile = (props) => {
                   variant="contained"
                   size="large"
                   className="user-profile-editBtn"
+                  onClick={handleTab}
                 >
                   <img src={Edit} className="edit-btn-logo" alt="" />
                   <span style={{ paddingLeft: "10px" }}>Edit profile</span>
@@ -256,11 +276,12 @@ const UserProfile = (props) => {
 
           <Grid item xs>
             <TabPanel value={value} index={0}>
-              <Grid container style={{ padding: "40px", minHeight: "250px" }} spacing={6}>
-                {loader ? (
+              {
+                loader ? (
                   <div
                     style={{
                       display: "flex",
+                      padding: "20vw 0",
                       width: "100%",
                       justifyContent: "center",
                     }}
@@ -276,14 +297,14 @@ const UserProfile = (props) => {
                       display: "flex",
                       width: "100%",
                       justifyContent: "center",
+                      padding: "10vw 0",
                     }}
                   >
                     No data to show
                   </div>
                 ) : (
-                      designContents.map((item, index) => (
-                  
-                        <Grid item xs={6} md={4} lg={3} xl={3}>
+                  <div className="fav-design-grid">
+                      {designContents.map((item, index) => (
                           <ProductCard
                             key={item.sku}
                             id={item.sku}
@@ -294,12 +315,13 @@ const UserProfile = (props) => {
                             isFavourite={true}
                             shouldRemoveFavourite
                             removeFavourite={() => removeFavourite(item.sku)}
+                            onClick={() => handleClick(item.slug)}
                             general
                           />
-                        </Grid>
-                      ))
-                    )}
-              </Grid>
+                      ))}
+                  </div>
+                )
+              }              
             </TabPanel>
             <TabPanel value={value} index={1}>
               <div>

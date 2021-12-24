@@ -13,6 +13,7 @@ export const decoProfile = (dispatch) => {
           firstName: res.first_name,
           lastName: res.last_name,
           profilePic: res.profile_picture,
+          entryLevel: res.entry_level
         })
       );
       dispatch(userDetailActions.setLoader(false));
@@ -32,6 +33,7 @@ export const artistProfile = (dispatch) => {
           firstName: res.first_name,
           lastName: res.last_name,
           profilePic: res.profile_picture,
+          entryLevel: res.entry_level
         })
       );
       dispatch(userDetailActions.setLoader(false));

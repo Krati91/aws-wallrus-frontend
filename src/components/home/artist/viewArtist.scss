@@ -42,6 +42,11 @@
       height: 48px;
       background-color: #1b1918;
       color: white;
+
+      &-outlined {
+        width: 16vw;
+        height: 48px;
+      }
     }
   }
 
@@ -59,4 +64,5 @@
 .artist-snippet-img {
   width: 140px;
   height: 140px;
+  border-radius: 50%;
 }

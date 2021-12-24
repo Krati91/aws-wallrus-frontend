@@ -9,7 +9,8 @@ const Artistitem = (props) => {
   const [isFollowed, setIsFollowed] = useState(false);
   const [followers, setFollowers] = useState();
 
-  const { item, handleArtistClick, removeFollower, shouldRemoveFollower } = props;
+  const { item, handleArtistClick, removeFollower, shouldRemoveFollower } =
+    props;
 
   useEffect(() => {
     setFollowers(item.followers);
@@ -24,7 +25,11 @@ const Artistitem = (props) => {
 
     followArtist(formData)
       .then((data) => {
-        setIsFollowed(true);
+        if (shouldRemoveFollower) {
+          removeFollower();
+        } else {
+          setIsFollowed(true);
+        }
         setFollowLoader(false);
         setFollowers(followers + 1);
       })
@@ -49,7 +54,6 @@ const Artistitem = (props) => {
         }
         setFollowers(followers - 1);
         setFollowLoader(false);
-
       })
       .catch((messed) => {
         alert("Couldn't unfollow that artist!");
@@ -69,7 +73,7 @@ const Artistitem = (props) => {
         container
         justify="space-between"
         direction="row"
-        onClick={() => handleArtistClick(item.full_name)}
+        onClick={() => handleArtistClick(item.Unique_id)}
       >
         <Grid item xs>
           <div className="artist-container">
@@ -156,16 +160,19 @@ const Artistitem = (props) => {
           <div style={{ padding: "0px 10px" }}>
             <Grid container spacing={2}>
               {item.design_images.map((img) => (
-                <img
-                  src={`${process.env.REACT_APP_ROOT_URL}${img}`}
-                  style={{
-                    width: 236,
-                    height: 140,
-                    borderRadius: 12,
-                    objectFit: "cover",
-                  }}
-                  alt="design img"
-                />
+                <Grid item xs={6} md={4} lg={4} xl={4}>
+                  <img
+                    src={`${process.env.REACT_APP_ROOT_URL}${img}`}
+                    style={{
+                      width: 236,
+                      height: 140,
+                      borderRadius: 12,
+                      objectFit: "cover",
+                      margin: "0 30px",
+                    }}
+                    alt="design img"
+                  />
+                </Grid>
               ))}
             </Grid>
           </div>

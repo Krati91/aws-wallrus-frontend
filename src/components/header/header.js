@@ -5,7 +5,7 @@ import UserSettings from "../user-settings/user-settings";
 import { Button } from "@material-ui/core";
 import Logo from "../../images/logo.svg";
 
-import "./header.css";
+import "./header.scss";
 
 const Header = () => {
     let opacity0, rotateRight, rotateLeft;
@@ -16,7 +16,7 @@ const Header = () => {
         setShow(!show);
     }
 
-    let displayClass = show ? "show" : "hide";
+    let displayClass = show ? "show" : "hide-routes";
     let displayBlock = show ? "display-block" : "display-none";
     if (show) {
       opacity0 = "opacity-0";

@@ -10,6 +10,7 @@ import Heart from '../../../../../images/Heart.svg';
 import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis,Tooltip,Legend } from 'recharts';
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { getAnalytics } from "../../../../../apis/apiCalls";
 
 const formatYAxis = (num) => {
   return Math.abs(num) > 999 ? Math.sign(num)*((Math.abs(num)/1000).toFixed(1)) + 'k' : Math.sign(num)*Math.abs(num)
@@ -23,9 +24,9 @@ const UserAnalytics = (props) =>{
   useEffect(() => {
     const init = async () => {
       try {
-        const response = await axios.get("/api/business-analytic");
-        console.log(response.data);
-        transformAnalytics(response.data);
+        const response = await getAnalytics();
+        console.log(response);
+        transformAnalytics(response);
         setLoader(false);
       } catch(err) {
         console.log(err);

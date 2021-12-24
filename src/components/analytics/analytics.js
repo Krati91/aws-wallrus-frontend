@@ -29,10 +29,13 @@ const Analytics = (props) => {
 
   useEffect(() => {
     const init = async () => {
-      const response = await getAnalytics();
-      console.log(response);
-      transformAnalytics(response);
-      setLoader(false);
+      try {
+        const response = await getAnalytics();
+        transformAnalytics(response);
+        setLoader(false);
+      } catch (err) {
+        setLoader(false);
+      }
     }
     init();
   }, []);

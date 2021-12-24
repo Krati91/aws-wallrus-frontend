@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react';
-import './user-collection.scss';
-import { useHistory } from 'react-router';
-import { Grid } from '@material-ui/core';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Collection1 from '../../../../../images/design1.svg';
-import Collection2 from '../../../../../images/design2.svg';
-import Collection3 from '../../../../../images/design3.svg';
-import { getDecoratorCollection } from '../../../../../apis/apiCalls';
+import { useEffect, useState } from "react";
+import "./user-collection.scss";
+import { useHistory } from "react-router";
+import { Grid } from "@material-ui/core";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Collection1 from "../../../../../images/design1.svg";
+import Collection2 from "../../../../../images/design2.svg";
+import Collection3 from "../../../../../images/design3.svg";
+import { getDecoratorCollection } from "../../../../../apis/apiCalls";
+import CollectionCard from "./collection-card/collection-card";
 
 const UserCollections = (props) => {
-
   const [loader, setloader] = useState(true);
   const [collections, setcollections] = useState([]);
 
@@ -49,81 +49,75 @@ const UserCollections = (props) => {
 
   const history = useHistory();
 
-  const handleClick = (e) => {
-    console.log(e.target.id);
-    history.push(`/collection/${e.target.id}`);
-  }
+  const handleClick = (id) => {
+    history.push(`/collection/${id}`);
+  };
 
   useEffect(() => {
-    getDecoratorCollection()
-      .then((res) => {
-        let Templist = [];
-        let productImages = [];
-        res.forEach((res, index) => {
-          // get Product Images
-          res.products.forEach((img) => {
-            productImages.push(img.image);
-          });
-          const collectionList = {
-            id: index,
-            img: productImages ? productImages : [Collection1, Collection2, Collection3],
-            title: res.name,
-            design: res.number_of_designs,
-            artist: res.number_of_artists,
-          }
-          Templist.push(collectionList);
+    getDecoratorCollection().then((res) => {
+      let Templist = [];
+      let productImages = [];
+      res.forEach((res, index) => {
+        // get Product Images
+        res.products.forEach((img) => {
+          productImages.push(img.image);
         });
-        setloader(false);
-        setcollections(Templist);
+        const collectionList = {
+          id: res.pk,
+          img: productImages
+            ? productImages
+            : [Collection1, Collection2, Collection3],
+          title: res.name,
+          design: res.number_of_designs,
+          artist: res.number_of_artists,
+        };
+        Templist.push(collectionList);
       });
+      setloader(false);
+      setcollections(Templist);
+    });
   }, []);
+
 
   return (
     <div className="user-collections">
-      <Grid spacing={1} container>
-        {
-          loader
-            ? (
-              <div style={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
-                <CircularProgress size={50} style={{ color: '#000', margin: '40px 0 60px' }} />
-              </div>
-            ) : (
-              collections && collections.length === 0
-                ? (
-                  <div style={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
-                    No data to show
-                  </div>
-                ) : (
-                  collections.map((item, index) => {
-                    return (
-                      <Grid item lg={4} xl={3} sm={6} xs={12} style={{ marginBottom: "30px" }} key={index}>
-                        <Grid container direction="column" spacing={1}>
-                          <Grid item xs={12} direction="row">
-                            <img id={item.id} onClick={handleClick} className='img-header' alt="img1" src={`${process.env.REACT_APP_ROOT_URL}/${item.img[0]}`}></img>
-                          </Grid>
-                          <Grid container direction="row" spacing={1}>
-                            <Grid item xs={12} direction="row">
-                              {
-                                (item.img.slice(0, 3)).map((current, iid) => {
-                                  return (
-                                    <img id={item.id} onClick={handleClick} className="img-footer" style={{ display: 'inline', margin: "0 5px 0px 5px", maxHeight: "100px" }} src={current} alt=''></img>
-                                  )
-                                })
-                              }
-                            </Grid>
-                          </Grid>
-                          <h2>{item.title}</h2>
-                          <p>{item.design > 1 ? `${item.design} Designs` : `1 Design`}&nbsp;.&nbsp;{item.artist > 1 ? `${item.artist} Artists` : `1 Artist`}</p>
-                        </Grid>
-                      </Grid>
-                    )
-                  })
-                )
-            )
-        }
+      <Grid spacing={4} container>
+        {loader ? (
+          <div
+            style={{ display: "flex", width: "100%", justifyContent: "center" }}
+          >
+            <CircularProgress
+              size={50}
+              style={{ color: "#000", margin: "40px 0 60px" }}
+            />
+          </div>
+        ) : collections && collections.length === 0 ? (
+          <div
+            style={{ display: "flex", width: "100%", justifyContent: "center" }}
+          >
+            No data to show
+          </div>
+        ) : (
+          collections.map((item, index) => {
+            return (
+              <Grid item xs={12} md={6} lg={3} xl={3}>
+                <CollectionCard
+                  key={item.id}
+                  id={item.id}
+                  onClick={(id) => handleClick(id)}
+                  headerImg={item.img[0]}
+                  otherImg={item.img.slice(1, 4)}
+                  collectionName={item.title}
+                  artists={item.design}
+                  designs={item.artist}
+                />
+              </Grid>
+            );
+          })
+        )}
       </Grid>
     </div>
-  )
+  );
 };
 
 export default UserCollections;

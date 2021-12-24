@@ -4,6 +4,7 @@ const initialState = {
   firstName: "",
   lastName: "",
   profilePic: "",
+  entryLevel: "",
   loader: true,
 }
 
@@ -15,6 +16,7 @@ const userDetails = createSlice({
       state.firstName = action.payload.firstName;
       state.lastName = action.payload.lastName;
       state.profilePic = action.payload.profilePic;
+      state.entryLevel = action.payload.entryLevel;
     },
     setLoader(state, action) {
       state.loader = action.payload;

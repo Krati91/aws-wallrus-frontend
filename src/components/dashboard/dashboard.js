@@ -154,7 +154,7 @@ const Dashboard = (props) => {
     dispatch(
       setProfilePicture(
         {
-          profile_picture: `${process.env.REACT_APP_ROOT_URL}/${artist_data.profile_picture}`
+          profile_picture: `${process.env.REACT_APP_ROOT_URL}${artist_data.profile_picture}`
         }
       ))
     dispatch(
@@ -205,6 +205,7 @@ const Dashboard = (props) => {
     }
     setIsLoading(true)
     artistProfile(dispatch);
+    setIsLoading(false);
 
     if (accessToken && refreshToken && firstName === '') {
       ArtistSnippet(accessToken, refreshToken)
@@ -216,7 +217,6 @@ const Dashboard = (props) => {
           setIsLoading(false);
           artistDispatch(refreshed_data);
         })
-
     }
 
   }, [])

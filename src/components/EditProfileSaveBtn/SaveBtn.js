@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
 import { Button, CircularProgress } from "@material-ui/core"
 import "./SaveBtn.scss"
 import { Check } from "@material-ui/icons"
@@ -40,6 +40,7 @@ import {
     selectNewPassword,
     selectConfirmNewPassword
 } from "../../redux/Slices/changePasswordSlice/changePasswordSlice";
+import { artistProfile, decoProfile } from "../../initProfile"
 
 
 
@@ -83,6 +84,9 @@ const CustomButton = (props) => {
     const bankBranch = useSelector(selectBankBranch);
     const swiftCode = useSelector(selectSwiftCode);
 
+    const dispatch = useDispatch();
+
+
     let ProfilePicture
     if (typeof (profilePic) === 'string') {
         ProfilePicture = ''
@@ -120,8 +124,6 @@ const CustomButton = (props) => {
         swiftCode
     }
 
-
-
     useEffect(() => {
 
         setSuccess(false)
@@ -131,6 +133,7 @@ const CustomButton = (props) => {
 
     const userType = window.localStorage.getItem("User_Type");
 
+    console.log(ProfilePicture);
 
     let changedValuesNotification =
     {
@@ -185,6 +188,12 @@ const CustomButton = (props) => {
                 .then((res) => {
                     setLoading(false)
                     setSuccess(true)
+                    console.log(userType);
+                    if (userType === "Interior Decorator") {
+                      decoProfile(dispatch);
+                    } else if (userType === "Artist") {
+                      artistProfile(dispatch);
+                    }
                     alert("Profile updated successfully");
                 })
                 .catch((err) => {

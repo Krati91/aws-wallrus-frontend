@@ -2,28 +2,24 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import MainNav from "../main-nav/main-nav";
 import Footer from "../footer/footer";
-import { Grid, Button } from "@material-ui/core";
-import ProductCard from "../product-cards";
+import { Button } from "@material-ui/core";
 import filterArrow from "../../../images/arrow-down.svg";
-import plusIcon from "../../../images/plus1.svg";
-import design5 from "../../../images/design1.svg";
-import design6 from "../../../images/design2.svg";
-import design7 from "../../../images/design3.svg";
 import Dropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import "./artistList.scss";
 import { ArtistListStatus } from "../../../apis/apiCalls";
-import { followArtist } from "../../../apis/apiCalls";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Artistitem from "./artistItem";
 
 const ArtistList = (props) => {
+  const paginationCount = 10;
   const [selectedFilter, setFilter] = useState("");
   const [artist, setArtist] = useState([]);
   const history = useHistory();
   const [loader, setLoader] = useState(false);
   const accessToken = localStorage.getItem("Access_Key");
   const refreshToken = localStorage.getItem("Refresh_Key");
+  const [slice, setSlice] = useState(paginationCount);
 
   useEffect(() => {
     setLoader(false);
@@ -31,8 +27,8 @@ const ArtistList = (props) => {
     if (accessToken && refreshToken) {
       ArtistListStatus(accessToken, refreshToken)
         .then((artist_data_status) => {
-          console.log(artist_data_status);
-          setArtist(artist_data_status);
+          const newArtistList = artist_data_status.filter((value) => !value.status);
+          setArtist(newArtistList);
           setLoader(true);
         })
         .catch((refreshed_data_status) => {
@@ -41,6 +37,8 @@ const ArtistList = (props) => {
         });
     }
   }, []);
+
+  console.log(slice, artist.length);
 
   const arrowClosed = (
     <img
@@ -67,6 +65,17 @@ const ArtistList = (props) => {
   const handleArtistClick = (artist) => {
     history.push(`/artist/${artist}`);
   };
+
+  const sliceHandler = () => {
+    setSlice(prev => prev + paginationCount);
+  }
+
+  const removeArtist = (id) => {
+    console.log("clicked");
+    const list = [...artist];
+    const newList = list.filter((artist) => artist.Unique_id !== id);
+    setArtist(newList);
+  }
 
   return (
     <div>
@@ -105,17 +114,25 @@ const ArtistList = (props) => {
           </div>
 
           <div style={{ padding: "0 40px" }}>
-            {artist.map(
+            {artist
+            .slice(0, slice)
+            .map(
               (item, index) => (
-                <Artistitem item={item} handleArtistClick={handleArtistClick} />
+                <Artistitem item={item} 
+                handleArtistClick={handleArtistClick} 
+                />
               )
             )}
           </div>
-          <div className="load-more-artists-container">
-            <Button variant="outlined" className="load-more-artists-btn">
-              Load more artists
-            </Button>
-          </div>
+          {
+            slice < artist.length && (
+              <div className="load-more-artists-container">
+                <Button variant="outlined" className="load-more-artists-btn" onClick={sliceHandler}>
+                  Load more artists
+                </Button>
+              </div>
+            )
+          }
           <Footer />
         </div>
       )}
