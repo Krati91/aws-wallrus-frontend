@@ -13,40 +13,6 @@ const UserCollections = (props) => {
   const [loader, setloader] = useState(true);
   const [collections, setcollections] = useState([]);
 
-  // const collections = [
-  //   {
-  //     id: 1,
-  //     img: [Collection1, Collection2, Collection3],
-  //     title: "Flower Print",
-  //     design: "23 Designs",
-  //     artist: "5 Artists",
-  //   },
-  //   {
-  //     id: 2,
-  //     img: [Collection1, Collection2, Collection3],
-  //     title: "Butterfly Print",
-  //     design: "13 Designs",
-  //     artist: "5 Artists",
-
-  //   },
-  //   {
-  //     id: 3,
-  //     img: [Collection1, Collection2, Collection3],
-  //     title: "Flower Print",
-  //     design: "2 Designs",
-  //     artist: "1 Artists",
-
-  //   },
-  //   {
-  //     id: 4,
-  //     img: [Collection1, Collection2, Collection3],
-  //     title: "Flower Print",
-  //     design: "2 Designs",
-  //     artist: "1 Artists",
-
-  //   },
-  // ];
-
   const history = useHistory();
 
   const handleClick = (id) => {
@@ -67,6 +33,7 @@ const UserCollections = (props) => {
           img: productImages
             ? productImages
             : [Collection1, Collection2, Collection3],
+          otherImg: res.products.slice(1, 4),
           title: res.name,
           design: res.number_of_designs,
           artist: res.number_of_artists,
@@ -106,7 +73,7 @@ const UserCollections = (props) => {
                   id={item.id}
                   onClick={(id) => handleClick(id)}
                   headerImg={item.img[0]}
-                  otherImg={item.img.slice(1, 4)}
+                  otherImg={item.otherImg}
                   collectionName={item.title}
                   artists={item.design}
                   designs={item.artist}
